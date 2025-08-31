@@ -48,7 +48,7 @@ const About: React.FC = () => {
               </p>
             </div>
             
-            <div className="grid lg:grid-cols-2 gap-16 items-center">
+            <div className="grid lg:grid-cols-2 gap-16 items-start">
               <div className="animate-slideInLeft">
                 <h3 className="text-3xl font-bold mb-8 text-gray-800">Your Technology Partner</h3>
                 <div className="space-y-6 text-lg text-gray-700 leading-relaxed">
@@ -62,48 +62,72 @@ const About: React.FC = () => {
                     Our team of 11-50 dedicated professionals brings together expertise in modern technologies and industry best practices to deliver exceptional software solutions.
                   </p>
                 </div>
+                
+                {/* Our Mission */}
+                <div className="mt-12 bg-white p-8 rounded-2xl shadow-lg border border-gray-100">
+                  <div className="flex items-center mb-6">
+                    <div className="text-blue-600 text-4xl mr-4">🎯</div>
+                    <h4 className="text-2xl font-bold text-gray-800">Our Mission</h4>
+                  </div>
+                  <p className="text-lg text-gray-700 leading-relaxed">
+                    To deliver innovative, cost-effective, and reliable software solutions that help businesses grow faster 
+                    and achieve their digital transformation goals.
+                  </p>
+                </div>
+                
+                {/* Our Vision */}
+                <div className="mt-8 bg-white p-8 rounded-2xl shadow-lg border border-gray-100">
+                  <div className="flex items-center mb-6">
+                    <div className="text-blue-600 text-4xl mr-4">🔮</div>
+                    <h4 className="text-2xl font-bold text-gray-800">Our Vision</h4>
+                  </div>
+                  <p className="text-lg text-gray-700 leading-relaxed">
+                    To become a trusted global technology partner for startups and enterprises, known for delivering 
+                    exceptional software solutions that drive business success.
+                  </p>
+                </div>
               </div>
               
-              <div className="animate-slideInRight">
+              <div className="animate-slideInRight space-y-8">
                 <img 
                   src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=600&q=80" 
                   alt="INFO(BSC) Team" 
                   className="w-full h-80 object-cover rounded-2xl shadow-xl"
                 />
-              </div>
-              
-              <div className="bg-white p-10 rounded-2xl shadow-xl hover-lift border border-gray-100 animate-slideInRight">
-                <h4 className="text-2xl font-bold mb-8 text-gray-800">Our Expertise</h4>
-                <div className="grid gap-4">
-                  <div className="flex items-center p-4 bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl">
-                    <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center mr-4">
-                      <span className="text-white font-bold">✓</span>
+                
+                <div className="bg-white p-10 rounded-2xl shadow-xl hover-lift border border-gray-100">
+                  <h4 className="text-2xl font-bold mb-8 text-gray-800">Our Expertise</h4>
+                  <div className="grid gap-4">
+                    <div className="flex items-center p-4 bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl">
+                      <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center mr-4">
+                        <span className="text-white font-bold">✓</span>
+                      </div>
+                      <span className="text-lg font-semibold text-gray-800">Custom Software Development</span>
                     </div>
-                    <span className="text-lg font-semibold text-gray-800">Custom Software Development</span>
-                  </div>
-                  <div className="flex items-center p-4 bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl">
-                    <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-600 rounded-xl flex items-center justify-center mr-4">
-                      <span className="text-white font-bold">✓</span>
+                    <div className="flex items-center p-4 bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl">
+                      <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-600 rounded-xl flex items-center justify-center mr-4">
+                        <span className="text-white font-bold">✓</span>
+                      </div>
+                      <span className="text-lg font-semibold text-gray-800">Web & Mobile Applications</span>
                     </div>
-                    <span className="text-lg font-semibold text-gray-800">Web & Mobile Applications</span>
-                  </div>
-                  <div className="flex items-center p-4 bg-gradient-to-r from-cyan-50 to-blue-50 rounded-xl">
-                    <div className="w-12 h-12 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-xl flex items-center justify-center mr-4">
-                      <span className="text-white font-bold">✓</span>
+                    <div className="flex items-center p-4 bg-gradient-to-r from-cyan-50 to-blue-50 rounded-xl">
+                      <div className="w-12 h-12 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-xl flex items-center justify-center mr-4">
+                        <span className="text-white font-bold">✓</span>
+                      </div>
+                      <span className="text-lg font-semibold text-gray-800">AI & Machine Learning Solutions</span>
                     </div>
-                    <span className="text-lg font-semibold text-gray-800">AI & Machine Learning Solutions</span>
-                  </div>
-                  <div className="flex items-center p-4 bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl">
-                    <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-emerald-600 rounded-xl flex items-center justify-center mr-4">
-                      <span className="text-white font-bold">✓</span>
+                    <div className="flex items-center p-4 bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl">
+                      <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-emerald-600 rounded-xl flex items-center justify-center mr-4">
+                        <span className="text-white font-bold">✓</span>
+                      </div>
+                      <span className="text-lg font-semibold text-gray-800">Cloud & DevOps Services</span>
                     </div>
-                    <span className="text-lg font-semibold text-gray-800">Cloud & DevOps Services</span>
-                  </div>
-                  <div className="flex items-center p-4 bg-gradient-to-r from-orange-50 to-red-50 rounded-xl">
-                    <div className="w-12 h-12 bg-gradient-to-r from-orange-500 to-red-600 rounded-xl flex items-center justify-center mr-4">
-                      <span className="text-white font-bold">✓</span>
+                    <div className="flex items-center p-4 bg-gradient-to-r from-orange-50 to-red-50 rounded-xl">
+                      <div className="w-12 h-12 bg-gradient-to-r from-orange-500 to-red-600 rounded-xl flex items-center justify-center mr-4">
+                        <span className="text-white font-bold">✓</span>
+                      </div>
+                      <span className="text-lg font-semibold text-gray-800">E-commerce & SaaS Platforms</span>
                     </div>
-                    <span className="text-lg font-semibold text-gray-800">E-commerce & SaaS Platforms</span>
                   </div>
                 </div>
               </div>
@@ -112,31 +136,7 @@ const About: React.FC = () => {
         </div>
       </section>
 
-      {/* Mission & Vision */}
-      <section className="py-16 bg-gray-50">
-        <div className="container mx-auto px-4">
-          <div className="max-w-6xl mx-auto">
-            <div className="grid md:grid-cols-2 gap-12">
-              <div className="text-center">
-                <div className="text-blue-600 text-6xl mb-6">🎯</div>
-                <h3 className="text-3xl font-bold mb-6">Our Mission</h3>
-                <p className="text-lg text-gray-700">
-                  To deliver innovative, cost-effective, and reliable software solutions that help businesses grow faster 
-                  and achieve their digital transformation goals.
-                </p>
-              </div>
-              <div className="text-center">
-                <div className="text-blue-600 text-6xl mb-6">🔮</div>
-                <h3 className="text-3xl font-bold mb-6">Our Vision</h3>
-                <p className="text-lg text-gray-700">
-                  To become a trusted global technology partner for startups and enterprises, known for delivering 
-                  exceptional software solutions that drive business success.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+
 
       {/* Core Values */}
       <section className="py-16 bg-white">

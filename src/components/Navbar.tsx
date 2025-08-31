@@ -48,24 +48,16 @@ const Navbar: React.FC = () => {
       <div className="max-w-7xl mx-auto flex items-center justify-between py-4 md:py-6 px-4 lg:px-8">
         {/* Logo */}
         <Link to="/" className="group flex items-center">
-          <div className="relative mr-3 navbar-logo">
-            <img 
-              src="/src/logo.png" 
-              alt="INFO(BSC) Logo" 
-              className="w-8 h-8 md:w-10 md:h-10 object-contain group-hover:scale-110 transition-transform duration-300"
-              onError={(e) => {
-                e.currentTarget.style.display = 'none';
-                e.currentTarget.nextElementSibling?.classList.remove('hidden');
-              }}
-            />
-            <div className="w-8 h-8 md:w-10 md:h-10 bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-lg hidden">
-              <span className="text-white font-bold text-lg"></span>
-            </div>
-            <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
-          </div>
-          <span className="text-xl md:text-2xl lg:text-3xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 bg-clip-text text-transparent group-hover:scale-105 transition-transform duration-300 navbar-logo-animate">
+          <div className="relative">
+            {/* <div className="w-10 h-10 bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 rounded-xl flex items-center justify-center mr-3 group-hover:scale-110 transition-transform duration-300 shadow-lg">
+              <span className="text-white font-bold text-lg">I</span>
+            </div> */}
+            <span className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 bg-clip-text text-transparent group-hover:scale-105 transition-transform duration-300 navbar-logo-animate">
             INFO(BSC)
           </span>
+            <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+          </div>
+          
         </Link>
 
         {/* Desktop Navigation */}
@@ -157,72 +149,72 @@ const Navbar: React.FC = () => {
       </div>
 
       {/* Mobile Navigation */}
-      <nav
+        <nav
         ref={mobileMenuRef}
-        className={
+          className={
           'lg:hidden absolute top-full left-0 right-0 bg-white/95 backdrop-blur-md shadow-xl border-b border-gray-200/50 transition-all duration-300 ease-out ' +
           (isOpen ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0 pointer-events-none')
-        }
-      >
+          }
+        >
         <div className="px-4 py-6 space-y-2">
-          <NavLink
-            to="/"
-            end
+              <NavLink
+                to="/"
+                end
             className={({ isActive }) =>
               isActive
                 ? 'text-blue-600 font-semibold block py-3 px-4 rounded-lg bg-blue-50 border-l-4 border-blue-600 transition-all duration-300'
                 : 'text-gray-700 hover:text-blue-600 hover:bg-gray-50 transition-all duration-300 block py-3 px-4 rounded-lg'
             }
-            onClick={() => setIsOpen(false)}
-          >
-            Home
-          </NavLink>
-          <NavLink
-            to="/services"
+                onClick={() => setIsOpen(false)}
+              >
+                Home
+              </NavLink>
+              <NavLink
+                to="/services"
             className={({ isActive }) =>
               isActive
                 ? 'text-blue-600 font-semibold block py-3 px-4 rounded-lg bg-blue-50 border-l-4 border-blue-600 transition-all duration-300'
                 : 'text-gray-700 hover:text-blue-600 hover:bg-gray-50 transition-all duration-300 block py-3 px-4 rounded-lg'
             }
-            onClick={() => setIsOpen(false)}
-          >
-            Services
-          </NavLink>
-          <NavLink
-            to="/success-stories"
+                onClick={() => setIsOpen(false)}
+              >
+                Services
+              </NavLink>
+              <NavLink
+                to="/success-stories"
             className={({ isActive }) =>
               isActive
                 ? 'text-blue-600 font-semibold block py-3 px-4 rounded-lg bg-blue-50 border-l-4 border-blue-600 transition-all duration-300'
                 : 'text-gray-700 hover:text-blue-600 hover:bg-gray-50 transition-all duration-300 block py-3 px-4 rounded-lg'
             }
-            onClick={() => setIsOpen(false)}
-          >
+                onClick={() => setIsOpen(false)}
+              >
             Success Stories
-          </NavLink>
-          <NavLink
-            to="/about"
+              </NavLink>
+              <NavLink
+                to="/about"
             className={({ isActive }) =>
               isActive
                 ? 'text-blue-600 font-semibold block py-3 px-4 rounded-lg bg-blue-50 border-l-4 border-blue-600 transition-all duration-300'
                 : 'text-gray-700 hover:text-blue-600 hover:bg-gray-50 transition-all duration-300 block py-3 px-4 rounded-lg'
             }
-            onClick={() => setIsOpen(false)}
-          >
-            About Us
-          </NavLink>
-          <NavLink
-            to="/contact"
+                onClick={() => setIsOpen(false)}
+              >
+                About Us
+              </NavLink>
+              <NavLink
+                to="/contact"
             className={({ isActive }) =>
               isActive
                 ? 'text-blue-600 font-semibold block py-3 px-4 rounded-lg bg-blue-50 border-l-4 border-blue-600 transition-all duration-300'
                 : 'text-gray-700 hover:text-blue-600 hover:bg-gray-50 transition-all duration-300 block py-3 px-4 rounded-lg'
             }
-            onClick={() => setIsOpen(false)}
-          >
-            Contact
-          </NavLink>
+                onClick={() => setIsOpen(false)}
+              >
+                Contact
+              </NavLink>
         </div>
-      </nav>
+        </nav>
     </header>
   );
 };

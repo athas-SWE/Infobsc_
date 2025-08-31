@@ -22,18 +22,7 @@ const Home: React.FC = () => {
             <div className="flex justify-center mb-6">
               <div className="group relative">
                 <div className="w-33 h-33 bg-gradient-to-r from-blue-500 via-purple-600 to-blue-700 rounded-1xl flex items-center justify-center shadow-2xl group-hover:shadow-3xl transition-all duration-500 group-hover:scale-110">
-                <img 
-              src="/src/logo.png" 
-              alt="INFO(BSC) Logo" 
-              className="w-8 h-8 md:w-10 md:h-10 object-contain group-hover:scale-110 transition-transform duration-300"
-              onError={(e) => {
-                e.currentTarget.style.display = 'none';
-                e.currentTarget.nextElementSibling?.classList.remove('hidden');
-              }}
-            />
-            <span className="text-xl md:text-2xl lg:text-3xl font-bold text-white">
-            INFO(BSC)
-          </span>
+                  <span className="text-white text-3xl font-bold">Info BSC</span>
                 </div>
                 <div className="absolute -top-2 -right-2 w-5 h-5 bg-gradient-to-r from-green-400 to-blue-500 rounded-full animate-ping"></div>
                 <div className="absolute -bottom-2 -left-2 w-4 h-4 bg-gradient-to-r from-purple-400 to-pink-500 rounded-full animate-pulse"></div>
@@ -225,7 +214,7 @@ const Home: React.FC = () => {
           <div className="text-center mt-16">
             <Link to="/services" className="btn-primary text-white font-semibold py-4 px-10 rounded-xl text-lg hover-lift">
               View All Services
-            </Link>
+          </Link>
           </div>
         </div>
       </section>
