@@ -8,14 +8,14 @@ module.exports = {
     extend: {
       colors: {
         primary: {
-          DEFAULT: '#0066cc',
-          light: '#3385ff',
-          dark: '#004c99',
+          DEFAULT: '#3b82f6',
+          light: '#60a5fa',
+          dark: '#2563eb',
         },
         neutral: {
-          light: '#f5f7fa',
+          light: '#f8fafc',
           DEFAULT: '#ffffff',
-          dark: '#f0f2f5',
+          dark: '#f1f5f9',
         },
       },
       container: {
