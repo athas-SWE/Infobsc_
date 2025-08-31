@@ -48,16 +48,24 @@ const Navbar: React.FC = () => {
       <div className="max-w-7xl mx-auto flex items-center justify-between py-4 md:py-6 px-4 lg:px-8">
         {/* Logo */}
         <Link to="/" className="group flex items-center">
-          <div className="relative">
-            {/* <div className="w-10 h-10 bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 rounded-xl flex items-center justify-center mr-3 group-hover:scale-110 transition-transform duration-300 shadow-lg">
-              <span className="text-white font-bold text-lg">I</span>
-            </div> */}
-            <span className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 bg-clip-text text-transparent group-hover:scale-105 transition-transform duration-300 navbar-logo-animate">
-            INFO(BSC)
-          </span>
+          <div className="relative mr-3 navbar-logo">
+            <img 
+              src="/src/logo.png" 
+              alt="INFO(BSC) Logo" 
+              className="w-8 h-8 md:w-10 md:h-10 object-contain group-hover:scale-110 transition-transform duration-300"
+              onError={(e) => {
+                e.currentTarget.style.display = 'none';
+                e.currentTarget.nextElementSibling?.classList.remove('hidden');
+              }}
+            />
+            <div className="w-8 h-8 md:w-10 md:h-10 bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-lg hidden">
+              <span className="text-white font-bold text-lg"></span>
+            </div>
             <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
           </div>
-          
+          <span className="text-xl md:text-2xl lg:text-3xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 bg-clip-text text-transparent group-hover:scale-105 transition-transform duration-300 navbar-logo-animate">
+            INFO(BSC)
+          </span>
         </Link>
 
         {/* Desktop Navigation */}

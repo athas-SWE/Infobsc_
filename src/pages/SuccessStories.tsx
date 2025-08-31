@@ -34,7 +34,7 @@ const testimonials: Testimonial[] = [
     name: 'Dr. Sarah Johnson',
     position: 'Medical Director',
     company: 'HealthClinic',
-    image: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?auto=format&fit=crop&w=150&q=80',
+    image: 'https://images.unsplash.com/photo-1582750433449-648ed127bb54?auto=format&fit=crop&w=300&q=80',
     rating: 5,
     testimonial: 'The appointment booking app they developed with React Native and ASP.NET Core has reduced no-shows by 80% and streamlined our scheduling process.',
     project: 'Appointment Booking App'
@@ -124,6 +124,9 @@ const SuccessStories: React.FC = () => {
                     src={testimonial.image} 
                     alt={testimonial.name} 
                     className="w-16 h-16 rounded-full object-cover mr-4 border-4 border-blue-100"
+                    onError={(e) => {
+                      e.currentTarget.src = 'https://images.unsplash.com/photo-1494790108755-2616b612b786?auto=format&fit=crop&w=300&q=80';
+                    }}
                   />
                   <div>
                     <h3 className="font-bold text-lg text-gray-800">{testimonial.name}</h3>
