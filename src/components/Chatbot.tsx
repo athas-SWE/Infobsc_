@@ -12,7 +12,7 @@ const Chatbot: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: 1,
-      text: "Hello! I'm the INFO(BSC) assistant. How can I help you today?",
+      text: "Hello! I'm the <span className='text-blue-900'>INFO</span> <span className='text-yellow-500'>BSC</span> assistant. How can I help you today?",
       sender: 'bot',
       timestamp: new Date()
     }
@@ -61,11 +61,11 @@ const Chatbot: React.FC = () => {
     const input = userInput.toLowerCase();
     
     if (input.includes('hello') || input.includes('hi')) {
-      return "Hello! Welcome to INFO(BSC). How can I assist you with your software development needs?";
+      return "Hello! Welcome to <span className='text-blue-900'>INFO</span> <span className='text-yellow-500'>BSC</span>. How can I assist you with your software development needs?";
     }
     
     if (input.includes('service') || input.includes('what do you do')) {
-      return "INFO(BSC) offers comprehensive software development services including web development, mobile apps, SaaS solutions, AI & automation, cloud & DevOps, and custom software development using ASP.NET Core, React, MySQL, and Azure.";
+      return "<span className='text-blue-900'>INFO</span> <span className='text-yellow-500'>BSC</span> offers comprehensive software development services including web development, mobile apps, SaaS solutions, AI & automation, cloud & DevOps, and custom software development using ASP.NET Core, React, MySQL, and Azure.";
     }
     
     if (input.includes('price') || input.includes('cost') || input.includes('quote')) {
@@ -73,7 +73,7 @@ const Chatbot: React.FC = () => {
     }
     
     if (input.includes('contact') || input.includes('phone') || input.includes('email')) {
-      return "You can reach us at infobsc12@gmail.com or call us at +94 75 249 1313. Our address is 159A, Mathrsa Road, Kalmunai -10, Sri Lanka. We're also available on WhatsApp, Facebook and LinkedIn. Would you like me to connect you with our team?";
+      return "You can reach us at contact@infobsc.com or call us at +94 75 249 1313. Our address is 159A, Mathrsa Road, Kalmunai -10, Sri Lanka. We're also available on WhatsApp, Facebook and LinkedIn. Would you like me to connect you with our team?";
     }
 
     if (input.includes('whatsapp') || input.includes('whats app')) {
@@ -92,7 +92,7 @@ const Chatbot: React.FC = () => {
       return "We provide 24/7 technical support for all our clients. Our team is always ready to help with any issues or questions you might have.";
     }
     
-    return "Thank you for your message! I'd be happy to help you with any questions about INFO(BSC)'s services. You can also contact us directly for more detailed information.";
+    return "Thank you for your message! I'd be happy to help you with any questions about <span className='text-blue-900'>INFO</span> <span className='text-yellow-500'>BSC</span>'s services. You can also contact us directly for more detailed information.";
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -107,7 +107,7 @@ const Chatbot: React.FC = () => {
       {/* Chat Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed bottom-6 right-6 z-50 w-14 h-14 md:w-14 md:h-14 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 flex items-center justify-center chatbot-button"
+        className="fixed bottom-4 xs:bottom-6 right-4 xs:right-6 z-50 w-12 h-12 xs:w-14 xs:h-14 md:w-14 md:h-14 bg-gradient-to-r from-blue-800 to-yellow-500 text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 flex items-center justify-center chatbot-button overflow-hidden"
         aria-label="Open chat"
       >
         {isOpen ? (
@@ -123,16 +123,22 @@ const Chatbot: React.FC = () => {
 
       {/* Chat Window */}
       {isOpen && (
-        <div className="fixed bottom-24 right-6 z-50 w-80 h-96 md:w-80 md:h-96 bg-white rounded-lg shadow-2xl border border-gray-200 flex flex-col chatbot-window">
+        <div className="fixed bottom-20 xs:bottom-24 right-4 xs:right-6 z-50 w-80 xs:w-96 sm:w-96 md:w-80 md:h-96 bg-white rounded-lg shadow-2xl border border-gray-200 flex flex-col chatbot-window">
           {/* Header */}
-          <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-4 rounded-t-lg">
+          <div className="bg-gradient-to-r from-blue-800 to-yellow-500 text-white p-3 xs:p-4 rounded-t-lg">
             <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-2">
-                <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
-                  <span className="text-sm font-bold">I</span>
+              <div className="flex items-center space-x-2 xs:space-x-3">
+                <div className="w-8 h-8 xs:w-10 xs:h-10 bg-white/90 rounded-full flex items-center justify-center shadow-lg overflow-hidden">
+                  <img
+                    src="/src/logo.png"
+                    alt="INFO BSC Logo"
+                    className="w-6 h-6 xs:w-8 xs:h-8 object-contain"
+                  />
                 </div>
                 <div>
-                  <h3 className="font-semibold">INFO(BSC) Assistant</h3>
+                  <h3 className="font-semibold text-sm xs:text-base">
+                    <span className="text-blue-900">INFO</span> <span className="text-yellow-500">BSC</span> Assistant
+                  </h3>
                   <p className="text-xs text-white/80">Online • Ready to help</p>
                 </div>
               </div>
@@ -148,7 +154,7 @@ const Chatbot: React.FC = () => {
           </div>
 
           {/* Messages */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-4">
+          <div className="flex-1 overflow-y-auto p-3 xs:p-4 space-y-3 xs:space-y-4">
             {messages.map((message) => (
               <div
                 key={message.id}
@@ -157,7 +163,7 @@ const Chatbot: React.FC = () => {
                 <div
                   className={`max-w-xs px-4 py-2 rounded-lg ${
                     message.sender === 'user'
-                      ? 'bg-blue-600 text-white'
+                      ? 'bg-blue-900 text-white'
                       : 'bg-gray-100 text-gray-800'
                   }`}
                 >
@@ -184,7 +190,7 @@ const Chatbot: React.FC = () => {
           </div>
 
           {/* Input */}
-          <div className="p-4 border-t border-gray-200">
+          <div className="p-3 xs:p-4 border-t border-gray-200">
             <div className="flex space-x-2">
               <input
                 type="text"
@@ -192,13 +198,13 @@ const Chatbot: React.FC = () => {
                 onChange={(e) => setInputValue(e.target.value)}
                 onKeyPress={handleKeyPress}
                 placeholder="Type your message..."
-                className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="flex-1 px-3 xs:px-3 py-2 xs:py-2 border border-gray-300 rounded-lg text-sm xs:text-base focus:outline-none focus:ring-2 focus:ring-blue-900 focus:border-transparent"
                 disabled={isTyping}
               />
               <button
                 onClick={handleSendMessage}
                 disabled={!inputValue.trim() || isTyping}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="px-3 xs:px-4 py-2 xs:py-2 bg-blue-900 text-white rounded-lg hover:bg-blue-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-sm xs:text-base"
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />

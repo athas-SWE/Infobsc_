@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+  scroll-behavior: smooth;
+}
+
 /* Custom base styles */
 body {
   @apply font-sans text-gray-800;
@@ -50,6 +54,33 @@ body {
   }
 }
 
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%) skewX(-12deg);
+  }
+  100% {
+    transform: translateX(200%) skewX(-12deg);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
 @keyframes gradient {
   0% {
     background-position: 0% 50%;
@@ -88,8 +119,22 @@ body {
   animation: slideInRight 0.8s ease-out;
 }
 
-.animate-pulse-slow {
-  animation: pulse 3s ease-in-out infinite;
+    .animate-pulse-slow {
+      animation: pulse 3s ease-in-out infinite;
+    }
+
+    .animate-spin-slow {
+      animation: spin 8s linear infinite;
+    }
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-shimmer {
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
 }
 
 .gradient-bg {
@@ -317,4 +362,9 @@ html {
     width: 3.5rem;
     height: 3.5rem;
   }
+}
+
+/* Shimmer animation class */
+.animate-shimmer {
+  animation: shimmer 1.5s ease-in-out infinite;
 }
