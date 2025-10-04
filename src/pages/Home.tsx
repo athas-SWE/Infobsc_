@@ -1,10 +1,133 @@
 
 import React, { useState, useEffect } from 'react';
+import Navbar from '../components/Navbar';
+import WhatsAppButton from '../components/WhatsAppButton';
+import Chatbot from '../components/Chatbot';
+
+// SDLC Animation Component
+const SDLCAnimation: React.FC = () => {
+  const [activePhase, setActivePhase] = useState(0);
+  const [isAnimating, setIsAnimating] = useState(true);
+
+  const sdlcPhases = [
+    { name: 'Planning', icon: '📋', color: 'from-blue-500 to-blue-700', shape: 'rounded-lg' },
+    { name: 'Analysis', icon: '🔍', color: 'from-green-500 to-green-700', shape: 'rounded-lg' },
+    { name: 'Design', icon: '🎨', color: 'from-purple-500 to-purple-700', shape: 'rounded-lg' },
+    { name: 'Development', icon: '💻', color: 'from-yellow-500 to-yellow-700', shape: 'rounded-lg' },
+    { name: 'Testing', icon: '🧪', color: 'from-red-500 to-red-700', shape: 'rounded-lg' },
+    { name: 'Deployment', icon: '🚀', color: 'from-indigo-500 to-indigo-700', shape: 'rounded-lg' },
+    { name: 'Maintenance', icon: '🔧', color: 'from-orange-500 to-orange-700', shape: 'rounded-lg' }
+  ];
+
+  useEffect(() => {
+    if (!isAnimating) return;
+    
+    const interval = setInterval(() => {
+      setActivePhase((prev) => (prev + 1) % sdlcPhases.length);
+    }, 2000);
+
+    return () => clearInterval(interval);
+  }, [isAnimating, sdlcPhases.length]);
+
+  // Responsive sizing
+  const radius = window.innerWidth < 640 ? 90 : 140; // Increased radius for better spacing
+  const centerX = window.innerWidth < 640 ? 144 : 192; // Updated for new container size
+  const centerY = window.innerWidth < 640 ? 144 : 192; // Updated for new container size
+  const containerSize = window.innerWidth < 640 ? 'w-72 h-72' : 'w-96 h-96'; // Increased container size
+  const phaseSize = window.innerWidth < 640 ? 'w-16 h-16' : 'w-20 h-20'; // Increased phase size
+  const centerSize = window.innerWidth < 640 ? 'w-16 h-16' : 'w-20 h-20'; // Decreased center size
+  const phaseTextSize = window.innerWidth < 640 ? 'text-xs' : 'text-xs';
+  const iconSize = window.innerWidth < 640 ? 'text-sm' : 'text-lg';
+
+  return (
+    <div className={`relative ${containerSize} mx-auto`}>
+      {/* Central Hub */}
+      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10">
+        <div className={`${centerSize} bg-gradient-to-br from-blue-900 to-yellow-600 rounded-full flex items-center justify-center shadow-2xl border-4 border-white animate-spin`} style={{animationDuration: '4s'}}>
+          <img 
+            src="/src/logo.png" 
+            alt="INFO BSC Logo" 
+            className="w-10 h-10 xs:w-12 xs:h-12 object-contain"
+          />
+        </div>
+      </div>
+
+      {/* SDLC Phases */}
+      {sdlcPhases.map((phase, index) => {
+        const angle = (index * 360) / sdlcPhases.length;
+        const radian = (angle * Math.PI) / 180;
+        const phaseOffset = window.innerWidth < 640 ? 32 : 40; // Updated to match larger phase size
+        const x = centerX + radius * Math.cos(radian) - phaseOffset;
+        const y = centerY + radius * Math.sin(radian) - phaseOffset;
+        
+        const isActive = index === activePhase;
+
+        return (
+          <div
+            key={index}
+            className={`absolute transition-all duration-1000 ease-in-out transform ${
+              isActive ? 'scale-110 z-20' : 'scale-100 z-10'
+            }`}
+            style={{
+              left: `${x}px`,
+              top: `${y}px`,
+              transform: `rotate(${angle}deg) ${isActive ? 'scale(1.1)' : 'scale(1)'}`,
+            }}
+          >
+            <div
+              className={`${phaseSize} ${phase.shape} flex flex-col items-center justify-center shadow-lg border-2 border-white transition-all duration-500 ${
+                isActive 
+                  ? `bg-gradient-to-br ${phase.color} text-white` 
+                  : 'bg-white text-gray-600 hover:bg-gray-50'
+              }`}
+              style={{transform: `rotate(-${angle}deg)`}}
+            >
+              <div className={`${iconSize} mb-1`}>{phase.icon}</div>
+              <div className={`${phaseTextSize} font-semibold text-center leading-tight ${
+                isActive ? 'text-white' : 'text-gray-600'
+              }`}>
+                {phase.name}
+              </div>
+            </div>
+          </div>
+        );
+      })}
+
+      {/* Connection Lines */}
+      <svg className="absolute inset-0 w-full h-full pointer-events-none">
+        {sdlcPhases.map((_, index) => {
+          const angle = (index * 360) / sdlcPhases.length;
+          const radian = (angle * Math.PI) / 180;
+          const x1 = centerX;
+          const y1 = centerY;
+          const x2 = centerX + radius * Math.cos(radian);
+          const y2 = centerY + radius * Math.sin(radian);
+          
+          return (
+            <line
+              key={index}
+              x1={x1}
+              y1={y1}
+              x2={x2}
+              y2={y2}
+              stroke="#e5e7eb"
+              strokeWidth="2"
+              className="animate-pulse"
+            />
+          );
+        })}
+      </svg>
+
+    </div>
+  );
+};
 
 const Home: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [activeTestimonial, setActiveTestimonial] = useState(0);
   const [expandedServices, setExpandedServices] = useState<{[key: string]: boolean}>({});
+  const [mediumPosts, setMediumPosts] = useState<any[]>([]);
+  const [loadingPosts, setLoadingPosts] = useState(true);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -99,247 +222,140 @@ const Home: React.FC = () => {
     return () => clearInterval(interval);
   }, [testimonials.length]);
 
+  // Fetch Medium blog posts
+  useEffect(() => {
+    const fetchMediumPosts = async () => {
+      try {
+        setLoadingPosts(true);
+        // Using rss2json to convert Medium RSS feed to JSON
+        const response = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=https://medium.com/feed/@infobsc12`);
+        const data = await response.json();
+        
+        if (data.status === 'ok' && data.items) {
+          // Get the latest 3 posts
+          setMediumPosts(data.items.slice(0, 3));
+        } else {
+          console.error('Failed to fetch Medium posts:', data);
+        }
+      } catch (error) {
+        console.error('Error fetching Medium posts:', error);
+        // Fallback to sample posts if API fails
+        setMediumPosts([]);
+      } finally {
+        setLoadingPosts(false);
+      }
+    };
+
+    fetchMediumPosts();
+  }, []);
+
   return (
     <>
+      <Navbar />
       {/* Hero Section */}
       <section id="home" className="relative min-h-screen bg-white flex items-center overflow-hidden">
-        {/* Futuristic AI/Cyborg Animation Elements */}
-        <div className="absolute inset-0 overflow-hidden">
-          {/* Concentric Energy Rings */}
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-            <div className="w-96 h-96 border border-blue-300/30 rounded-full animate-pulse-slow"></div>
-            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 border border-blue-400/40 rounded-full animate-pulse-slow" style={{animationDelay: '1s'}}></div>
-            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 border border-blue-900/50 rounded-full animate-pulse-slow" style={{animationDelay: '2s'}}></div>
-          </div>
-
-          {/* Floating UI Elements - Code Blocks */}
-          <div className="absolute top-20 left-20 animate-float">
-            <div className="bg-blue-900/90 backdrop-blur-sm rounded-lg px-3 py-2 shadow-lg hover:scale-110 transition-transform duration-300">
-              <span className="text-white text-sm font-mono">[ ]</span>
-            </div>
-          </div>
-
-          <div className="absolute top-32 right-32 animate-float" style={{animationDelay: '1s'}}>
-            <div className="bg-blue-900/90 backdrop-blur-sm rounded-lg px-3 py-2 shadow-lg hover:scale-110 transition-transform duration-300">
-              <span className="text-white text-sm font-mono">×</span>
-            </div>
-          </div>
-
-          <div className="absolute top-1/2 left-16 animate-float" style={{animationDelay: '2s'}}>
-            <div className="bg-blue-500/90 backdrop-blur-sm rounded-lg px-4 py-3 shadow-lg hover:scale-110 transition-transform duration-300">
-              <span className="text-white text-lg font-mono">&lt;/&gt;</span>
-            </div>
-          </div>
-
-          {/* Code Text Blocks */}
-          <div className="absolute top-1/2 left-8 animate-float" style={{animationDelay: '3s'}}>
-            <div className="bg-yellow-600/90 backdrop-blur-sm rounded-lg px-4 py-3 shadow-lg hover:scale-110 transition-transform duration-300">
-              <div className="space-y-1">
-                <div className="w-16 h-1 bg-white/80 rounded"></div>
-                <div className="w-12 h-1 bg-white/80 rounded"></div>
-                <div className="w-14 h-1 bg-white/80 rounded"></div>
-                <div className="w-10 h-1 bg-white/80 rounded"></div>
-              </div>
-            </div>
-          </div>
-
-          <div className="absolute top-1/2 right-8 animate-float" style={{animationDelay: '4s'}}>
-            <div className="bg-blue-900/70 backdrop-blur-sm rounded-lg px-4 py-3 shadow-lg hover:scale-110 transition-transform duration-300">
-              <div className="space-y-1">
-                <div className="w-20 h-1 bg-white/80 rounded"></div>
-                <div className="w-14 h-1 bg-white/80 rounded"></div>
-                <div className="w-18 h-1 bg-white/80 rounded"></div>
-                <div className="w-12 h-1 bg-white/80 rounded"></div>
-              </div>
-            </div>
-          </div>
-
-          {/* Gear Icon */}
-          <div className="absolute bottom-32 right-20 animate-spin-slow">
-            <div className="w-12 h-12 bg-gradient-to-br from-blue-900 to-yellow-600 rounded-full flex items-center justify-center shadow-lg">
-              <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M12 15.5A3.5 3.5 0 0 1 8.5 12A3.5 3.5 0 0 1 12 8.5a3.5 3.5 0 0 1 3.5 3.5a3.5 3.5 0 0 1-3.5 3.5m7.43-2.53c.04-.32.07-.64.07-.97c0-.33-.03-.66-.07-1l2.11-1.63c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.31-.61-.22l-2.49 1c-.52-.39-1.06-.73-1.69-.98l-.37-2.65A.506.506 0 0 0 14 2h-4c-.25 0-.46.18-.5.42l-.37 2.65c-.63.25-1.17.59-1.69.98l-2.49-1c-.22-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64L4.57 11c-.04.34-.07.67-.07 1c0 .33.03.65.07.97l-2.11 1.66c-.19.15-.25.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1.01c.52.4 1.06.74 1.69.99l.37 2.65c.04.24.25.42.5.42h4c.25 0 .46-.18.5-.42l.37-2.65c.63-.26 1.17-.59 1.69-.99l2.49 1.01c.22.08.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.66Z"/>
-              </svg>
-            </div>
-          </div>
-
-          {/* Browser Window */}
-          <div className="absolute bottom-20 left-1/2 transform -translate-x-1/2 animate-float" style={{animationDelay: '5s'}}>
-            <div className="bg-blue-900/90 backdrop-blur-sm rounded-lg shadow-lg hover:scale-105 transition-transform duration-300">
-              {/* Browser Header */}
-              <div className="flex items-center justify-between px-4 py-2 bg-blue-900/80 rounded-t-lg">
-                <div className="flex space-x-2">
-                  <div className="w-3 h-3 bg-red-400 rounded-full"></div>
-                  <div className="w-3 h-3 bg-yellow-400 rounded-full"></div>
-                  <div className="w-3 h-3 bg-green-400 rounded-full"></div>
-                </div>
-                <span className="text-white text-xs font-mono">×</span>
-        </div>
-        
-              {/* Browser Content */}
-              <div className="p-4">
-                <div className="flex space-x-2 mb-3">
-                  <div className="w-6 h-6 bg-white/80 rounded-full"></div>
-                  <div className="w-6 h-6 bg-white/80 rounded-full"></div>
-                </div>
-                <div className="space-y-2">
-                  <div className="w-20 h-2 bg-white/60 rounded"></div>
-                  <div className="w-16 h-2 bg-white/60 rounded"></div>
-                  <div className="w-24 h-2 bg-white/60 rounded"></div>
-                </div>
-                </div>
-              </div>
-            </div>
-            
-          {/* Data Nodes on Rings */}
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-            <div className="w-4 h-4 bg-blue-900 rounded-full absolute top-0 left-1/2 transform -translate-x-1/2 animate-pulse"></div>
-            <div className="w-3 h-3 bg-yellow-600 rounded-full absolute top-1/4 right-0 transform translate-x-1/2 animate-pulse" style={{animationDelay: '0.5s'}}></div>
-            <div className="w-3 h-3 bg-blue-900 rounded-full absolute bottom-1/4 left-0 transform -translate-x-1/2 animate-pulse" style={{animationDelay: '1s'}}></div>
-            <div className="w-4 h-4 bg-yellow-600 rounded-full absolute bottom-0 left-1/2 transform -translate-x-1/2 animate-pulse" style={{animationDelay: '1.5s'}}></div>
-          </div>
-
-          {/* Glowing Particles */}
-          <div className="absolute top-1/4 left-1/4 w-2 h-2 bg-blue-400 rounded-full animate-pulse opacity-60"></div>
-          <div className="absolute top-1/3 right-1/3 w-2 h-2 bg-blue-900 rounded-full animate-pulse opacity-60" style={{animationDelay: '0.5s'}}></div>
-          <div className="absolute bottom-1/3 left-1/3 w-2 h-2 bg-yellow-600 rounded-full animate-pulse opacity-60" style={{animationDelay: '1s'}}></div>
-          <div className="absolute bottom-1/4 right-1/4 w-2 h-2 bg-blue-900 rounded-full animate-pulse opacity-60" style={{animationDelay: '1.5s'}}></div>
-        </div>
-
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10">
-          <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+        <div className="max-w-7xl mx-auto px-3 xs:px-4 sm:px-6 lg:px-8 w-full relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 xs:gap-8 lg:gap-12 items-center">
             {/* Left Content */}
-            <div className={`space-y-8 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+            <div className={`space-y-4 xs:space-y-6 sm:space-y-8 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
               {/* Main Headlines */}
-              <div className="space-y-4">
-                <h1 className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold text-gray-900 leading-tight">
+              <div className="space-y-2 xs:space-y-3 sm:space-y-4">
+                <h1 className="text-xl xs:text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-7xl font-bold text-gray-900 leading-tight">
                   <span className="block animate-fadeInUp" style={{animationDelay: '0.2s'}}>Make A Real</span>
                   <span className="block text-yellow-500 animate-fadeInUp" style={{animationDelay: '0.4s'}}>Difference.</span>
-          </h1>
-                <h2 className="text-xl xs:text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-bold text-gray-900 leading-tight">
+                </h1>
+                <h2 className="text-lg xs:text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-6xl font-bold text-gray-900 leading-tight">
                   <span className="block animate-fadeInUp" style={{animationDelay: '0.6s'}}>Your Vision,</span>
                   <span className="block text-yellow-500 animate-fadeInUp" style={{animationDelay: '0.8s'}}>Our Expertise.</span>
                 </h2>
-                <h3 className="text-lg xs:text-xl sm:text-2xl md:text-3xl lg:text-5xl font-bold text-gray-900">
+                <h3 className="text-base xs:text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-5xl font-bold text-gray-900">
                   <span className="text-yellow-500 animate-fadeInUp" style={{animationDelay: '1s'}}>Powerful Results.</span>
                 </h3>
-          </div>
+              </div>
           
               {/* Description */}
-              <div className="space-y-3 xs:space-y-4 sm:space-y-6 text-sm xs:text-base sm:text-lg text-gray-600 leading-relaxed max-w-2xl">
+              <div className="space-y-2 xs:space-y-3 sm:space-y-4 text-xs xs:text-sm sm:text-base md:text-lg text-gray-600 leading-relaxed max-w-2xl">
                 <p className="animate-fadeInUp" style={{animationDelay: '1.2s'}}>
                   From complex problems to ambitious visions, we partner with you to transform your ideas into powerful software and mobile solutions.
                 </p>
                 <p className="animate-fadeInUp" style={{animationDelay: '1.4s'}}>
                   We listen, collaborate, and deliver custom solutions that simplify challenges, streamline processes, and fuel business growth.
-            </p>
-          </div>
+                </p>
+              </div>
           
               {/* CTA Button */}
-              <div className="pt-4 animate-fadeInUp" style={{animationDelay: '1.6s'}}>
+              <div className="pt-2 xs:pt-3 sm:pt-4 animate-fadeInUp" style={{animationDelay: '1.6s'}}>
                 <a 
                   href="https://calendly.com/infobsc12" 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="group inline-flex items-center bg-blue-800 text-white font-semibold px-4 xs:px-6 sm:px-8 py-2 xs:py-3 sm:py-4 rounded-lg text-sm xs:text-base sm:text-lg hover:bg-blue-700 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
+                  className="group inline-flex items-center bg-blue-800 text-white font-semibold px-3 xs:px-4 sm:px-6 md:px-8 py-2 xs:py-2 sm:py-3 md:py-4 rounded-lg text-xs xs:text-sm sm:text-base md:text-lg hover:bg-blue-700 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
                 >
                   Get in touch
-                  <svg className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="ml-1 xs:ml-2 w-4 h-4 xs:w-5 xs:h-5 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                   </svg>
                 </a>
               </div>
             </div>
             
-            {/* Right Content - Visual Elements */}
-            <div className={`relative transition-all duration-1000 delay-200 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+            {/* Right Content - SDLC Animation */}
+            <div className={`relative transition-all duration-1000 delay-200 mt-6 xs:mt-8 lg:mt-0 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
               {/* Main Visual Container */}
-              <div className="relative bg-gradient-to-br from-blue-50 to-yellow-50 rounded-3xl p-8 shadow-2xl hover:shadow-3xl transition-all duration-500 hover:scale-105">
-                {/* Floating Elements */}
-                <div className="absolute -top-4 -right-4 w-16 h-16 bg-blue-900 rounded-2xl flex items-center justify-center shadow-lg animate-float">
-                  <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
+              <div className="relative bg-gradient-to-br from-blue-50 to-yellow-50 rounded-2xl xs:rounded-3xl p-4 xs:p-6 sm:p-8 shadow-xl xs:shadow-2xl hover:shadow-3xl transition-all duration-500 hover:scale-105">
+                {/* Floating Elements - Hidden on mobile for cleaner look */}
+                <div className="hidden xs:block absolute -top-2 xs:-top-4 -right-2 xs:-right-4 w-12 h-12 xs:w-16 xs:h-16 bg-blue-900 rounded-xl xs:rounded-2xl flex items-center justify-center shadow-lg">
+                  <svg className="w-6 h-6 xs:w-8 xs:h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
                   </svg>
                 </div>
                 
-                <div className="absolute -bottom-4 -left-4 w-12 h-12 bg-yellow-600 rounded-xl flex items-center justify-center shadow-lg animate-float" style={{animationDelay: '1s'}}>
-                  <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                <div className="hidden xs:block absolute -bottom-2 xs:-bottom-4 -left-2 xs:-left-4 w-8 h-8 xs:w-12 xs:h-12 bg-yellow-600 rounded-lg xs:rounded-xl flex items-center justify-center shadow-lg">
+                  <svg className="w-4 h-4 xs:w-6 xs:h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                   </svg>
                 </div>
                 
-                <div className="absolute top-1/2 -right-6 w-10 h-10 bg-blue-900 rounded-lg flex items-center justify-center shadow-lg animate-float" style={{animationDelay: '2s'}}>
-                  <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                <div className="hidden sm:block absolute top-1/2 -right-4 xs:-right-6 w-8 h-8 xs:w-10 xs:h-10 bg-blue-900 rounded-lg flex items-center justify-center shadow-lg">
+                  <svg className="w-4 h-4 xs:w-5 xs:h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M13 10V3L4 14h7v7l9-11h-7z"/>
                   </svg>
                 </div>
                 
-                {/* Central Logo Interface */}
-                <div className="text-center space-y-6">
-                  {/* INFO BSC Text Above Logo */}
-                  <div className="animate-fadeInUp" style={{animationDelay: '0.2s'}}>
-                    <h4 className="text-2xl font-bold mb-4">
-                      <span className="text-blue-900">INFO</span> <span className="text-yellow-500">BSC</span>
-                    </h4>
+                {/* SDLC Animation Container */}
+                <div className="text-center space-y-3 xs:space-y-4 sm:space-y-6">
+                  {/* SDLC Animation */}
+                  <div className="flex justify-center">
+                    <SDLCAnimation />
                   </div>
                   
-                  <div className="w-28 h-36 xs:w-32 xs:h-40 sm:w-40 sm:h-48 bg-gradient-to-br from-blue-900/20 to-yellow-600/20 backdrop-blur-sm rounded-3xl flex flex-col items-center justify-center mx-auto shadow-2xl hover:scale-110 transition-all duration-500 animate-float border border-blue-900/30">
-                    {/* Logo Image */}
-                    <div className="w-20 h-20 xs:w-24 xs:h-24 sm:w-32 sm:h-32 bg-white/90 rounded-2xl flex items-center justify-center mb-2 xs:mb-3 sm:mb-4 shadow-lg relative overflow-hidden">
-                      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer"></div>
-                      <img 
-                        src="/src/logo.png" 
-                        alt="INFO BSC Logo" 
-                        className="w-16 h-16 xs:w-20 xs:h-20 sm:w-24 sm:h-24 object-contain relative z-10 animate-pulse"
-                      />
+                  <div className="flex justify-center space-x-2 xs:space-x-3 sm:space-x-4">
+                    <div className="w-6 h-6 xs:w-8 xs:h-8 bg-blue-100 rounded-lg flex items-center justify-center hover:scale-110 transition-transform duration-300">
+                      <div className="w-2 h-2 xs:w-3 xs:h-3 bg-blue-900 rounded-full animate-pulse"></div>
                     </div>
-                    
-                    {/* Status Indicators */}
-                    <div className="flex space-x-2 mb-3">
-                      <div className="w-2 h-2 bg-blue-900 rounded-full animate-pulse"></div>
-                      <div className="w-2 h-2 bg-yellow-600 rounded-full animate-pulse" style={{animationDelay: '0.5s'}}></div>
-                      <div className="w-2 h-2 bg-blue-700 rounded-full animate-pulse" style={{animationDelay: '1s'}}></div>
+                    <div className="w-6 h-6 xs:w-8 xs:h-8 bg-yellow-100 rounded-lg flex items-center justify-center hover:scale-110 transition-transform duration-300">
+                      <div className="w-2 h-2 xs:w-3 xs:h-3 bg-yellow-600 rounded-full animate-pulse" style={{animationDelay: '0.5s'}}></div>
                     </div>
-                    
-                    {/* Data Streams */}
-                    <div className="space-y-1">
-                      <div className="w-20 h-1 bg-blue-900/60 rounded-full animate-pulse"></div>
-                      <div className="w-16 h-1 bg-yellow-600/60 rounded-full animate-pulse" style={{animationDelay: '0.3s'}}></div>
-                      <div className="w-18 h-1 bg-blue-700/60 rounded-full animate-pulse" style={{animationDelay: '0.6s'}}></div>
-                    </div>
-                  </div>
-                  
-                  <div className="space-y-2 animate-fadeInUp" style={{animationDelay: '0.4s'}}>
-                    <p className="text-sm text-gray-500">Empowering Digital Growth...</p>
-                  </div>
-                  
-                  <div className="flex justify-center space-x-4">
-                    <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center hover:scale-110 transition-transform duration-300">
-                      <div className="w-3 h-3 bg-blue-900 rounded-full animate-pulse"></div>
-                    </div>
-                    <div className="w-8 h-8 bg-yellow-100 rounded-lg flex items-center justify-center hover:scale-110 transition-transform duration-300">
-                      <div className="w-3 h-3 bg-yellow-600 rounded-full animate-pulse" style={{animationDelay: '0.5s'}}></div>
-                    </div>
-                    <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center hover:scale-110 transition-transform duration-300">
-                      <div className="w-3 h-3 bg-blue-700 rounded-full animate-pulse" style={{animationDelay: '1s'}}></div>
+                    <div className="w-6 h-6 xs:w-8 xs:h-8 bg-blue-100 rounded-lg flex items-center justify-center hover:scale-110 transition-transform duration-300">
+                      <div className="w-2 h-2 xs:w-3 xs:h-3 bg-blue-700 rounded-full animate-pulse" style={{animationDelay: '1s'}}></div>
                     </div>
                   </div>
                 </div>
               </div>
               
-              {/* Background Decorative Elements */}
-              <div className="absolute -z-10 top-10 left-10 w-32 h-32 bg-blue-100 rounded-full opacity-50 animate-pulse-slow"></div>
-              <div className="absolute -z-10 bottom-10 right-10 w-24 h-24 bg-yellow-100 rounded-full opacity-50 animate-pulse-slow" style={{animationDelay: '2s'}}></div>
+              {/* Background Decorative Elements - Hidden on mobile */}
+              <div className="hidden sm:block absolute -z-10 top-6 xs:top-10 left-6 xs:left-10 w-20 xs:w-32 h-20 xs:h-32 bg-blue-100 rounded-full opacity-50 animate-pulse-slow"></div>
+              <div className="hidden sm:block absolute -z-10 bottom-6 xs:bottom-10 right-6 xs:right-10 w-16 xs:w-24 h-16 xs:h-24 bg-yellow-100 rounded-full opacity-50 animate-pulse-slow" style={{animationDelay: '2s'}}></div>
             </div>
           </div>
           </div>
           
         {/* Scroll Indicator */}
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+        <div className="absolute bottom-4 xs:bottom-6 sm:bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
           <div className="flex flex-col items-center text-gray-400">
-            <span className="text-sm mb-2">Scroll to explore</span>
-            <div className="w-6 h-10 border-2 border-gray-300 rounded-full flex justify-center">
-              <div className="w-1 h-3 bg-gray-400 rounded-full mt-2 animate-pulse"></div>
+            <span className="text-xs xs:text-sm mb-1 xs:mb-2">Scroll to explore</span>
+            <div className="w-5 h-8 xs:w-6 xs:h-10 border-2 border-gray-300 rounded-full flex justify-center">
+              <div className="w-0.5 xs:w-1 h-2 xs:h-3 bg-gray-400 rounded-full mt-1 xs:mt-2 animate-pulse"></div>
             </div>
           </div>
         </div>
@@ -356,9 +372,9 @@ const Home: React.FC = () => {
         
         {/* Floating Elements */}
         <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute top-20 right-20 w-20 h-20 bg-gradient-to-r from-blue-200/20 to-purple-200/20 rounded-full blur-2xl animate-float"></div>
-          <div className="absolute bottom-20 left-20 w-32 h-32 bg-gradient-to-r from-purple-200/20 to-pink-200/20 rounded-full blur-2xl animate-float" style={{animationDelay: '2s'}}></div>
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-40 h-40 bg-gradient-to-r from-cyan-200/20 to-blue-200/20 rounded-full blur-3xl animate-float" style={{animationDelay: '4s'}}></div>
+          <div className="absolute top-20 right-20 w-20 h-20 bg-gradient-to-r from-blue-200/20 to-purple-200/20 rounded-full blur-2xl"></div>
+          <div className="absolute bottom-20 left-20 w-32 h-32 bg-gradient-to-r from-purple-200/20 to-pink-200/20 rounded-full blur-2xl"></div>
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-40 h-40 bg-gradient-to-r from-cyan-200/20 to-blue-200/20 rounded-full blur-3xl"></div>
         </div>
         
         <div className="container mx-auto px-4 relative z-10">
@@ -795,7 +811,7 @@ const Home: React.FC = () => {
               
               {/* Main Content */}
               <div className="relative z-10">
-                <div className="flex items-center justify-center mb-4">
+              <div className="flex items-center justify-center mb-4">
                   {/* Central Logo */}
                   <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center mr-4 shadow-lg border border-white/30">
                     <img 
@@ -804,9 +820,9 @@ const Home: React.FC = () => {
                       className="w-12 h-12 object-contain"
                     />
                   </div>
-                  <h3 className="text-2xl font-bold">FREE CONSULTATION AVAILABLE</h3>
-                </div>
-                <p className="text-lg opacity-90 mb-6">Get expert advice on your project at no cost</p>
+                <h3 className="text-2xl font-bold">FREE CONSULTATION AVAILABLE</h3>
+              </div>
+              <p className="text-lg opacity-90 mb-6">Get expert advice on your project at no cost</p>
                 
                 {/* Consultation Benefits */}
                 <div className="flex justify-center space-x-8 mb-6">
@@ -842,13 +858,345 @@ const Home: React.FC = () => {
                   rel="noopener noreferrer"
                   className="group inline-flex items-center bg-white text-blue-800 font-semibold px-8 py-3 rounded-lg hover:bg-gray-100 transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl"
                 >
-                  Schedule Your Free Consultation
-                  <svg className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                  </svg>
-                </a>
+                Schedule Your Free Consultation
+                <svg className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+              </a>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Blog Section */}
+      <section id="blog" className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Section Header */}
+          <div className="text-center mb-16">
+            <h2 className="text-3xl xs:text-4xl sm:text-5xl md:text-6xl font-bold text-gray-900 mb-6">
+              Latest <span className="text-blue-900">Blog</span> <span className="text-yellow-500">Posts</span>
+            </h2>
+            <p className="text-lg xs:text-xl text-gray-600 max-w-3xl mx-auto">
+              Stay updated with our latest insights, tutorials, and industry trends
+            </p>
+          </div>
+
+          {/* Blog Posts Grid */}
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {loadingPosts ? (
+              // Enhanced loading skeleton with better image placeholder
+              Array.from({ length: 3 }).map((_, index) => (
+                <article key={index} className="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-200 animate-pulse">
+                  <div className="h-48 bg-gradient-to-br from-gray-200 to-gray-300 relative overflow-hidden">
+                    <div className="absolute inset-0 bg-gradient-to-t from-gray-300/50 to-transparent"></div>
+                    <div className="absolute bottom-4 left-4">
+                      <div className="h-6 bg-gray-400 rounded-full w-20"></div>
+                    </div>
+                    <div className="absolute top-4 right-4">
+                      <div className="w-8 h-8 bg-gray-400 rounded-full"></div>
+                    </div>
+                  </div>
+                  <div className="p-6">
+                    <div className="flex items-center mb-3">
+                      <div className="h-4 bg-gray-300 rounded w-24"></div>
+                      <div className="mx-2 w-1 h-1 bg-gray-300 rounded-full"></div>
+                      <div className="h-4 bg-gray-300 rounded w-16"></div>
+                    </div>
+                    <div className="h-6 bg-gray-300 rounded mb-3"></div>
+                    <div className="h-4 bg-gray-300 rounded mb-2"></div>
+                    <div className="h-4 bg-gray-300 rounded mb-4"></div>
+                    <div className="h-4 bg-gray-300 rounded w-24"></div>
+                  </div>
+                </article>
+              ))
+            ) : mediumPosts.length > 0 ? (
+              // Enhanced Real Medium posts with better image handling
+              mediumPosts.map((post, index) => (
+                <article key={index} className="group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 hover:scale-105 overflow-hidden border border-gray-200">
+                  <div className="h-48 relative overflow-hidden">
+                    {/* Enhanced Image with Loading State */}
+                    <img 
+                      src={post.thumbnail || `https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=80`} 
+                      alt={post.title} 
+                      className="w-full h-full object-cover transition-all duration-700 group-hover:scale-110"
+                      loading="lazy"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.src = `https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=80`;
+                      }}
+                    />
+                    
+                    {/* Enhanced Gradient Overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent group-hover:from-black/80 transition-all duration-500"></div>
+                    
+                    {/* Enhanced Category Badge */}
+                    <div className="absolute bottom-4 left-4 text-white">
+                      <span className="text-sm font-medium bg-gradient-to-r from-blue-900/90 to-blue-800/90 backdrop-blur-sm px-3 py-1 rounded-full border border-white/20 shadow-lg">
+                        {post.categories?.[0] || 'Technology'}
+                      </span>
+                    </div>
+                    
+                    {/* Enhanced Reading Time Badge */}
+                    <div className="absolute top-4 right-4">
+                      <span className="text-xs font-medium bg-white/90 backdrop-blur-sm text-gray-800 px-2 py-1 rounded-full border border-gray-200 shadow-sm">
+                        {Math.ceil(post.content?.split(' ').length / 200) || 5} min
+                      </span>
+                    </div>
+                    
+                    {/* Hover Overlay with Read More */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-blue-900/80 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 flex items-end justify-center pb-4">
+                      <span className="text-white font-semibold text-sm bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full border border-white/30">
+                        Click to Read More
+                      </span>
+                    </div>
+                  </div>
+                  
+                  <div className="p-6">
+                    <div className="flex items-center mb-3">
+                      <span className="text-sm text-gray-500">
+                        {new Date(post.pubDate).toLocaleDateString('en-US', { 
+                          year: 'numeric', 
+                          month: 'long', 
+                          day: 'numeric' 
+                        })}
+                      </span>
+                      <span className="mx-2 text-gray-300">•</span>
+                      <span className="text-sm text-blue-600 font-medium">
+                        {Math.ceil(post.content?.split(' ').length / 200) || 5} min read
+                      </span>
+                    </div>
+                    <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-blue-900 transition-colors line-clamp-2">
+                      {post.title}
+                    </h3>
+                    <p className="text-gray-600 mb-4 line-clamp-3">
+                      {post.description?.replace(/<[^>]*>/g, '').substring(0, 150)}...
+                    </p>
+                    <a 
+                      href={post.link} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center text-blue-900 font-semibold hover:text-yellow-500 transition-colors group/link"
+                    >
+                      Read More
+                      <svg className="ml-2 w-4 h-4 group-hover/link:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                      </svg>
+                    </a>
+                  </div>
+                </article>
+              ))
+            ) : (
+              // Enhanced Fallback sample posts with better image handling
+              <>
+                <article className="group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 hover:scale-105 overflow-hidden border border-gray-200">
+                  <div className="h-48 relative overflow-hidden">
+                    {/* Enhanced Image with Loading State */}
+                    <img 
+                      src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=80" 
+                      alt="Web Development Trends 2024" 
+                      className="w-full h-full object-cover transition-all duration-700 group-hover:scale-110"
+                      loading="lazy"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.src = "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=80";
+                      }}
+                    />
+                    
+                    {/* Enhanced Gradient Overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent group-hover:from-black/80 transition-all duration-500"></div>
+                    
+                    {/* Enhanced Category Badge */}
+                    <div className="absolute bottom-4 left-4 text-white">
+                      <span className="text-sm font-medium bg-gradient-to-r from-blue-900/90 to-blue-800/90 backdrop-blur-sm px-3 py-1 rounded-full border border-white/20 shadow-lg">
+                        Technology
+                      </span>
+                    </div>
+                    
+                    {/* Enhanced Reading Time Badge */}
+                    <div className="absolute top-4 right-4">
+                      <span className="text-xs font-medium bg-white/90 backdrop-blur-sm text-gray-800 px-2 py-1 rounded-full border border-gray-200 shadow-sm">
+                        5 min
+                      </span>
+                    </div>
+                    
+                    {/* Hover Overlay with Read More */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-blue-900/80 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 flex items-end justify-center pb-4">
+                      <span className="text-white font-semibold text-sm bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full border border-white/30">
+                        Click to Read More
+                      </span>
+                    </div>
+                  </div>
+                  <div className="p-6">
+                    <div className="flex items-center mb-3">
+                      <span className="text-sm text-gray-500">December 15, 2024</span>
+                      <span className="mx-2 text-gray-300">•</span>
+                      <span className="text-sm text-blue-600 font-medium">5 min read</span>
+                    </div>
+                    <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-blue-900 transition-colors">
+                      Latest Web Development Trends for 2024
+                    </h3>
+                    <p className="text-gray-600 mb-4 line-clamp-3">
+                      Discover the cutting-edge technologies and frameworks that are shaping the future of web development in 2024. From AI integration to performance optimization.
+                    </p>
+                    <a 
+                      href="https://medium.com/@infobsc12" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center text-blue-900 font-semibold hover:text-yellow-500 transition-colors group/link"
+                    >
+                      Read More
+                      <svg className="ml-2 w-4 h-4 group-hover/link:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                      </svg>
+                    </a>
+                  </div>
+                </article>
+
+                <article className="group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 hover:scale-105 overflow-hidden border border-gray-200">
+                  <div className="h-48 relative overflow-hidden">
+                    {/* Enhanced Image with Loading State */}
+                    <img 
+                      src="https://images.unsplash.com/photo-1516321318287-5bf6151a9372?auto=format&fit=crop&w=800&q=80" 
+                      alt="React Best Practices" 
+                      className="w-full h-full object-cover transition-all duration-700 group-hover:scale-110"
+                      loading="lazy"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.src = "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=80";
+                      }}
+                    />
+                    
+                    {/* Enhanced Gradient Overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent group-hover:from-black/80 transition-all duration-500"></div>
+                    
+                    {/* Enhanced Category Badge */}
+                    <div className="absolute bottom-4 left-4 text-white">
+                      <span className="text-sm font-medium bg-gradient-to-r from-yellow-500/90 to-yellow-600/90 backdrop-blur-sm px-3 py-1 rounded-full border border-white/20 shadow-lg">
+                        React
+                      </span>
+                    </div>
+                    
+                    {/* Enhanced Reading Time Badge */}
+                    <div className="absolute top-4 right-4">
+                      <span className="text-xs font-medium bg-white/90 backdrop-blur-sm text-gray-800 px-2 py-1 rounded-full border border-gray-200 shadow-sm">
+                        7 min
+                      </span>
+                    </div>
+                    
+                    {/* Hover Overlay with Read More */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-blue-900/80 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 flex items-end justify-center pb-4">
+                      <span className="text-white font-semibold text-sm bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full border border-white/30">
+                        Click to Read More
+                      </span>
+                    </div>
+                  </div>
+                  <div className="p-6">
+                    <div className="flex items-center mb-3">
+                      <span className="text-sm text-gray-500">December 10, 2024</span>
+                      <span className="mx-2 text-gray-300">•</span>
+                      <span className="text-sm text-blue-600 font-medium">7 min read</span>
+                    </div>
+                    <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-blue-900 transition-colors">
+                      React Development Best Practices
+                    </h3>
+                    <p className="text-gray-600 mb-4 line-clamp-3">
+                      Learn essential React patterns and best practices that will make your applications more maintainable, performant, and scalable.
+                    </p>
+                    <a 
+                      href="https://medium.com/@infobsc12" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center text-blue-900 font-semibold hover:text-yellow-500 transition-colors group/link"
+                    >
+                      Read More
+                      <svg className="ml-2 w-4 h-4 group-hover/link:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                      </svg>
+                    </a>
+                  </div>
+                </article>
+
+                <article className="group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 hover:scale-105 overflow-hidden border border-gray-200">
+                  <div className="h-48 relative overflow-hidden">
+                    {/* Enhanced Image with Loading State */}
+                    <img 
+                      src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80" 
+                      alt="API Development Guide" 
+                      className="w-full h-full object-cover transition-all duration-700 group-hover:scale-110"
+                      loading="lazy"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.src = "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=80";
+                      }}
+                    />
+                    
+                    {/* Enhanced Gradient Overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent group-hover:from-black/80 transition-all duration-500"></div>
+                    
+                    {/* Enhanced Category Badge */}
+                    <div className="absolute bottom-4 left-4 text-white">
+                      <span className="text-sm font-medium bg-gradient-to-r from-blue-800/90 to-blue-900/90 backdrop-blur-sm px-3 py-1 rounded-full border border-white/20 shadow-lg">
+                        Backend
+                      </span>
+                    </div>
+                    
+                    {/* Enhanced Reading Time Badge */}
+                    <div className="absolute top-4 right-4">
+                      <span className="text-xs font-medium bg-white/90 backdrop-blur-sm text-gray-800 px-2 py-1 rounded-full border border-gray-200 shadow-sm">
+                        10 min
+                      </span>
+                    </div>
+                    
+                    {/* Hover Overlay with Read More */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-blue-900/80 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 flex items-end justify-center pb-4">
+                      <span className="text-white font-semibold text-sm bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full border border-white/30">
+                        Click to Read More
+                      </span>
+                    </div>
+                  </div>
+                  <div className="p-6">
+                    <div className="flex items-center mb-3">
+                      <span className="text-sm text-gray-500">December 5, 2024</span>
+                      <span className="mx-2 text-gray-300">•</span>
+                      <span className="text-sm text-blue-600 font-medium">10 min read</span>
+                    </div>
+                    <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-blue-900 transition-colors">
+                      Complete Guide to API Development
+                    </h3>
+                    <p className="text-gray-600 mb-4 line-clamp-3">
+                      A comprehensive guide to building robust, scalable APIs using modern technologies and best practices for security and performance.
+                    </p>
+                    <a 
+                      href="https://medium.com/@infobsc12" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center text-blue-900 font-semibold hover:text-yellow-500 transition-colors group/link"
+                    >
+                      Read More
+                      <svg className="ml-2 w-4 h-4 group-hover/link:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                      </svg>
+                    </a>
+                  </div>
+                </article>
+              </>
+            )}
+          </div>
+
+          {/* View All Posts Button */}
+          <div className="text-center mt-12">
+            <a 
+              href="https://medium.com/@infobsc12" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="inline-flex items-center bg-gradient-to-r from-blue-900 to-yellow-600 text-white font-semibold px-8 py-3 rounded-lg hover:shadow-lg transition-all duration-300 hover:scale-105"
+            >
+              View All Posts on Medium
+              <svg className="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
+            </a>
           </div>
         </div>
       </section>
@@ -952,10 +1300,15 @@ const Home: React.FC = () => {
                       <div className="bg-gradient-to-br from-blue-50 via-white to-purple-50 p-12 rounded-3xl shadow-2xl border border-gray-100/50">
                         <div className="flex flex-col lg:flex-row items-center gap-12">
                           <div className="flex-shrink-0">
-                            <div className="w-32 h-32 rounded-full bg-gradient-to-br from-blue-800 to-yellow-500 flex items-center justify-center border-4 border-white shadow-xl">
-                              <span className="text-white text-3xl font-bold">
-                                {testimonial.name.split(' ').map(n => n[0]).join('').substring(0, 2)}
-                              </span>
+                            <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-white shadow-xl">
+                              <img 
+                                src={testimonial.avatar || `https://images.unsplash.com/photo-${1500000000000 + index * 1000000}?auto=format&fit=crop&w=200&q=80`}
+                                alt={testimonial.name}
+                                className="w-full h-full object-cover"
+                                onError={(e) => {
+                                  e.currentTarget.src = `https://ui-avatars.com/api/?name=${testimonial.name}&background=3B82F6&color=ffffff&size=128`;
+                                }}
+                              />
                             </div>
                             <div className="text-center mt-6">
                               <h3 className="text-2xl font-bold text-gray-800">{testimonial.name}</h3>
@@ -1179,13 +1532,13 @@ const Home: React.FC = () => {
                             alt="INFO BSC Logo" 
                             className="w-6 h-6 xs:w-8 xs:h-8 object-contain"
                           />
-                        </div>
+                </div>
                         <div>
                           <h4 className="font-bold text-gray-800 text-xs xs:text-sm">
                             <span className="text-blue-900">INFO</span> <span className="text-yellow-500">BSC</span>
                           </h4>
                           <p className="text-xs text-blue-600 font-semibold">Software Development</p>
-                        </div>
+          </div>
                       </div>
                       <div className="space-y-1">
                         <p className="text-xs xs:text-sm text-gray-600">159A, Mathrsa Road</p>
@@ -1196,7 +1549,7 @@ const Home: React.FC = () => {
                   </div>
                 </div>
               </div>
-            </div>
+          </div>
           
             {/* Contact Form */}
             <div>
@@ -1320,6 +1673,8 @@ const Home: React.FC = () => {
         </div>
       </section>
 
+      <WhatsAppButton />
+      <Chatbot />
     </>
   );
 };

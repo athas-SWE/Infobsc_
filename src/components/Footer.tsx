@@ -1,6 +1,10 @@
 import React from 'react';
 
-const Footer: React.FC = () => {
+interface FooterProps {
+  onPolicyClick: (policyType: string) => void;
+}
+
+const Footer: React.FC<FooterProps> = ({ onPolicyClick }) => {
   return (
     <footer className="bg-gradient-to-br from-blue-900 via-gray-900 to-blue-800 text-white relative overflow-hidden">
       {/* Background Pattern */}
@@ -133,11 +137,11 @@ const Footer: React.FC = () => {
                 </a>
               </li>
               <li>
-                <a href="#success-stories" className="text-gray-300 hover:text-white transition-colors flex items-center group">
+                <a href="#blog" className="text-gray-300 hover:text-white transition-colors flex items-center group">
                   <svg className="w-4 h-4 mr-2 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                   </svg>
-                  Success Stories
+                  Blog
                 </a>
               </li>
               <li>
@@ -180,18 +184,50 @@ const Footer: React.FC = () => {
               </p>
             </div>
             <div className="flex flex-wrap justify-center lg:justify-end gap-6 text-sm">
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">
+              <button 
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  onPolicyClick('privacy');
+                }}
+                className="text-gray-400 hover:text-white transition-colors cursor-pointer bg-transparent border-none p-0"
+              >
                 Privacy Policy
-              </a>
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">
+              </button>
+              <button 
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  onPolicyClick('terms');
+                }}
+                className="text-gray-400 hover:text-white transition-colors cursor-pointer bg-transparent border-none p-0"
+              >
                 Terms of Service
-              </a>
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">
+              </button>
+              <button 
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  onPolicyClick('cookie');
+                }}
+                className="text-gray-400 hover:text-white transition-colors cursor-pointer bg-transparent border-none p-0"
+              >
                 Cookie Policy
-              </a>
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">
+              </button>
+              <button 
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  onPolicyClick('refund');
+                }}
+                className="text-gray-400 hover:text-white transition-colors cursor-pointer bg-transparent border-none p-0"
+              >
                 Refund Policy
-              </a>
+              </button>
             </div>
           </div>
         </div>

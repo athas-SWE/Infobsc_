@@ -73,10 +73,10 @@ const Navbar: React.FC = () => {
             About Us
           </a>
           <a
-            href="#success-stories"
+            href="#blog"
             className="text-gray-700 hover:text-blue-900 transition-all duration-300 relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-gradient-to-r after:from-blue-900 after:to-yellow-600 hover:after:w-full after:transition-all after:duration-300"
           >
-            Success Stories
+            Blog
           </a>
           <a
             href="#contact"
@@ -150,11 +150,11 @@ const Navbar: React.FC = () => {
                 About Us
               </a>
               <a
-                href="#success-stories"
+                href="#blog"
                 className="text-gray-700 hover:text-blue-900 hover:bg-gray-50 transition-all duration-300 block py-2 xs:py-3 px-3 xs:px-4 rounded-lg text-sm xs:text-base"
                 onClick={() => setIsOpen(false)}
               >
-                Success Stories
+                Blog
               </a>
               <a
                 href="#contact"
