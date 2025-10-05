@@ -7,7 +7,6 @@ import Chatbot from '../components/Chatbot';
 // SDLC Animation Component
 const SDLCAnimation: React.FC = () => {
   const [activePhase, setActivePhase] = useState(0);
-  const [isAnimating, setIsAnimating] = useState(true);
 
   const sdlcPhases = [
     { name: 'Planning', icon: '📋', color: 'from-blue-500 to-blue-700', shape: 'rounded-lg' },
@@ -20,14 +19,13 @@ const SDLCAnimation: React.FC = () => {
   ];
 
   useEffect(() => {
-    if (!isAnimating) return;
     
     const interval = setInterval(() => {
       setActivePhase((prev) => (prev + 1) % sdlcPhases.length);
     }, 2000);
 
     return () => clearInterval(interval);
-  }, [isAnimating, sdlcPhases.length]);
+  }, [sdlcPhases.length]);
 
   // Responsive sizing
   const radius = window.innerWidth < 640 ? 90 : 140; // Increased radius for better spacing
@@ -45,7 +43,7 @@ const SDLCAnimation: React.FC = () => {
       <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10">
         <div className={`${centerSize} bg-gradient-to-br from-blue-900 to-yellow-600 rounded-full flex items-center justify-center shadow-2xl border-4 border-white animate-spin`} style={{animationDuration: '4s'}}>
           <img 
-            src="/src/logo.png" 
+            src="/logo.png" 
             alt="INFO BSC Logo" 
             className="w-10 h-10 xs:w-12 xs:h-12 object-contain"
           />
@@ -132,10 +130,68 @@ const Home: React.FC = () => {
     name: '',
     email: '',
     phone: '',
+    countryCode: '+94',
     projectDetails: ''
   });
   const [formErrors, setFormErrors] = useState<{[key: string]: string}>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Country codes for phone number selector
+  const countryCodes = [
+    { code: '+1', country: 'US/Canada', flag: '🇺🇸' },
+    { code: '+44', country: 'UK', flag: '🇬🇧' },
+    { code: '+49', country: 'Germany', flag: '🇩🇪' },
+    { code: '+33', country: 'France', flag: '🇫🇷' },
+    { code: '+39', country: 'Italy', flag: '🇮🇹' },
+    { code: '+34', country: 'Spain', flag: '🇪🇸' },
+    { code: '+31', country: 'Netherlands', flag: '🇳🇱' },
+    { code: '+46', country: 'Sweden', flag: '🇸🇪' },
+    { code: '+47', country: 'Norway', flag: '🇳🇴' },
+    { code: '+45', country: 'Denmark', flag: '🇩🇰' },
+    { code: '+41', country: 'Switzerland', flag: '🇨🇭' },
+    { code: '+43', country: 'Austria', flag: '🇦🇹' },
+    { code: '+32', country: 'Belgium', flag: '🇧🇪' },
+    { code: '+351', country: 'Portugal', flag: '🇵🇹' },
+    { code: '+30', country: 'Greece', flag: '🇬🇷' },
+    { code: '+90', country: 'Turkey', flag: '🇹🇷' },
+    { code: '+7', country: 'Russia', flag: '🇷🇺' },
+    { code: '+86', country: 'China', flag: '🇨🇳' },
+    { code: '+81', country: 'Japan', flag: '🇯🇵' },
+    { code: '+82', country: 'South Korea', flag: '🇰🇷' },
+    { code: '+91', country: 'India', flag: '🇮🇳' },
+    { code: '+92', country: 'Pakistan', flag: '🇵🇰' },
+    { code: '+93', country: 'Afghanistan', flag: '🇦🇫' },
+    { code: '+94', country: 'Sri Lanka', flag: '🇱🇰' },
+    { code: '+95', country: 'Myanmar', flag: '🇲🇲' },
+    { code: '+880', country: 'Bangladesh', flag: '🇧🇩' },
+    { code: '+977', country: 'Nepal', flag: '🇳🇵' },
+    { code: '+975', country: 'Bhutan', flag: '🇧🇹' },
+    { code: '+960', country: 'Maldives', flag: '🇲🇻' },
+    { code: '+61', country: 'Australia', flag: '🇦🇺' },
+    { code: '+64', country: 'New Zealand', flag: '🇳🇿' },
+    { code: '+27', country: 'South Africa', flag: '🇿🇦' },
+    { code: '+20', country: 'Egypt', flag: '🇪🇬' },
+    { code: '+971', country: 'UAE', flag: '🇦🇪' },
+    { code: '+966', country: 'Saudi Arabia', flag: '🇸🇦' },
+    { code: '+974', country: 'Qatar', flag: '🇶🇦' },
+    { code: '+965', country: 'Kuwait', flag: '🇰🇼' },
+    { code: '+973', country: 'Bahrain', flag: '🇧🇭' },
+    { code: '+968', country: 'Oman', flag: '🇴🇲' },
+    { code: '+962', country: 'Jordan', flag: '🇯🇴' },
+    { code: '+961', country: 'Lebanon', flag: '🇱🇧' },
+    { code: '+972', country: 'Israel', flag: '🇮🇱' },
+    { code: '+55', country: 'Brazil', flag: '🇧🇷' },
+    { code: '+54', country: 'Argentina', flag: '🇦🇷' },
+    { code: '+56', country: 'Chile', flag: '🇨🇱' },
+    { code: '+57', country: 'Colombia', flag: '🇨🇴' },
+    { code: '+51', country: 'Peru', flag: '🇵🇪' },
+    { code: '+52', country: 'Mexico', flag: '🇲🇽' },
+    { code: '+58', country: 'Venezuela', flag: '🇻🇪' },
+    { code: '+593', country: 'Ecuador', flag: '🇪🇨' },
+    { code: '+591', country: 'Bolivia', flag: '🇧🇴' },
+    { code: '+598', country: 'Uruguay', flag: '🇺🇾' },
+    { code: '+595', country: 'Paraguay', flag: '🇵🇾' }
+  ];
 
   useEffect(() => {
     setIsVisible(true);
@@ -143,7 +199,16 @@ const Home: React.FC = () => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    
+    // Format phone number input
+    if (name === 'phone') {
+      // Remove all non-digit characters except spaces and dashes
+      const formattedValue = value.replace(/[^\d\s-]/g, '');
+      setFormData(prev => ({ ...prev, [name]: formattedValue }));
+    } else {
+      setFormData(prev => ({ ...prev, [name]: value }));
+    }
+    
     if (formErrors[name]) {
       setFormErrors(prev => ({ ...prev, [name]: '' }));
     }
@@ -180,7 +245,7 @@ const Home: React.FC = () => {
     setTimeout(() => {
       setIsSubmitting(false);
       alert('Thank you for your message! We will get back to you soon.');
-      setFormData({ name: '', email: '', phone: '', projectDetails: '' });
+      setFormData({ name: '', email: '', phone: '', countryCode: '+94', projectDetails: '' });
     }, 2000);
   };
 
@@ -764,16 +829,16 @@ const Home: React.FC = () => {
               {/* Background Logo Pattern */}
               <div className="absolute inset-0 opacity-5">
                 <div className="absolute top-4 left-4 w-16 h-16">
-                  <img src="/src/logo.png" alt="Logo Pattern" className="w-full h-full object-contain opacity-30" />
+                  <img src="/logo.png" alt="Logo Pattern" className="w-full h-full object-contain opacity-30" />
                 </div>
                 <div className="absolute top-4 right-4 w-12 h-12">
-                  <img src="/src/logo.png" alt="Logo Pattern" className="w-full h-full object-contain opacity-20" />
+                  <img src="/logo.png" alt="Logo Pattern" className="w-full h-full object-contain opacity-20" />
                 </div>
                 <div className="absolute bottom-4 left-8 w-10 h-10">
-                  <img src="/src/logo.png" alt="Logo Pattern" className="w-full h-full object-contain opacity-25" />
+                  <img src="/logo.png" alt="Logo Pattern" className="w-full h-full object-contain opacity-25" />
                 </div>
                 <div className="absolute bottom-4 right-8 w-14 h-14">
-                  <img src="/src/logo.png" alt="Logo Pattern" className="w-full h-full object-contain opacity-20" />
+                  <img src="/logo.png" alt="Logo Pattern" className="w-full h-full object-contain opacity-20" />
                 </div>
               </div>
               
@@ -815,7 +880,7 @@ const Home: React.FC = () => {
                   {/* Central Logo */}
                   <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center mr-4 shadow-lg border border-white/30">
                     <img 
-                      src="/src/logo.png" 
+                      src="/logo.png" 
                       alt="INFO BSC Logo" 
                       className="w-12 h-12 object-contain"
                     />
@@ -1302,7 +1367,7 @@ const Home: React.FC = () => {
                           <div className="flex-shrink-0">
                             <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-white shadow-xl">
                               <img 
-                                src={testimonial.avatar || `https://images.unsplash.com/photo-${1500000000000 + index * 1000000}?auto=format&fit=crop&w=200&q=80`}
+                                src={`https://images.unsplash.com/photo-${1500000000000 + index * 1000000}?auto=format&fit=crop&w=200&q=80`}
                                 alt={testimonial.name}
                                 className="w-full h-full object-cover"
                                 onError={(e) => {
@@ -1528,7 +1593,7 @@ const Home: React.FC = () => {
                       <div className="flex items-center mb-2 xs:mb-3">
                         <div className="w-8 h-8 xs:w-10 xs:h-10 bg-white rounded-full flex items-center justify-center mr-2 xs:mr-3 shadow-md overflow-hidden">
                           <img 
-                            src="/src/logo.png" 
+                            src="/logo.png" 
                             alt="INFO BSC Logo" 
                             className="w-6 h-6 xs:w-8 xs:h-8 object-contain"
                           />
@@ -1611,15 +1676,42 @@ const Home: React.FC = () => {
                   <label htmlFor="phone" className="block text-lg font-semibold text-gray-700 mb-3">
                     Phone Number
                   </label>
-                  <input
-                    id="phone"
-                    name="phone"
-                    type="tel"
-                    value={formData.phone}
-                    onChange={handleInputChange}
-                    className="w-full border-2 border-gray-300 rounded-xl px-6 py-4 text-lg focus:border-blue-900 focus:outline-none focus:ring-4 focus:ring-blue-200 transition-all duration-300"
-                    placeholder="+94 75 249 1313"
-                  />
+                  <div className="flex">
+                    {/* Country Code Selector */}
+                    <div className="relative">
+                      <select
+                        value={formData.countryCode}
+                        onChange={(e) => setFormData(prev => ({ ...prev, countryCode: e.target.value }))}
+                        className="border-2 border-gray-300 rounded-l-xl px-4 py-4 text-lg focus:border-blue-900 focus:outline-none focus:ring-4 focus:ring-blue-200 transition-all duration-300 bg-white appearance-none cursor-pointer min-w-[120px]"
+                      >
+                        {countryCodes.map((country) => (
+                          <option key={country.code} value={country.code}>
+                            {country.flag} {country.code}
+                          </option>
+                        ))}
+                      </select>
+                      {/* Custom dropdown arrow */}
+                      <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                        <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                        </svg>
+                      </div>
+                    </div>
+                    
+                    {/* Phone Number Input */}
+                    <input
+                      id="phone"
+                      name="phone"
+                      type="tel"
+                      value={formData.phone}
+                      onChange={handleInputChange}
+                      className="flex-1 border-2 border-l-0 border-gray-300 rounded-r-xl px-6 py-4 text-lg focus:border-blue-900 focus:outline-none focus:ring-4 focus:ring-blue-200 transition-all duration-300"
+                      placeholder="75 249 1313"
+                    />
+                  </div>
+                  <p className="text-sm text-gray-500 mt-2">
+                    Full number: {formData.countryCode} {formData.phone || 'your number'}
+                  </p>
                 </div>
                 <div>
                   <label htmlFor="projectDetails" className="block text-lg font-semibold text-gray-700 mb-3">

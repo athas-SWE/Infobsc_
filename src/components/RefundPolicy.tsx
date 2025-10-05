@@ -20,7 +20,7 @@ const RefundPolicy: React.FC<RefundPolicyProps> = ({ onClose }) => {
             <div className="flex items-center space-x-3">
               <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center">
                 <img 
-                  src="/src/logo.png" 
+                  src="/logo.png" 
                   alt="INFO BSC Logo" 
                   className="w-8 h-8 object-contain"
                 />

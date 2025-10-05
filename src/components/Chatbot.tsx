@@ -130,7 +130,7 @@ const Chatbot: React.FC = () => {
               <div className="flex items-center space-x-2 xs:space-x-3">
                 <div className="w-8 h-8 xs:w-10 xs:h-10 bg-white/90 rounded-full flex items-center justify-center shadow-lg overflow-hidden">
                   <img
-                    src="/src/logo.png"
+                    src="/logo.png"
                     alt="INFO BSC Logo"
                     className="w-6 h-6 xs:w-8 xs:h-8 object-contain"
                   />
