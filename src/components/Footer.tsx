@@ -44,7 +44,7 @@ const Footer: React.FC<FooterProps> = ({ onPolicyClick }) => {
             <div className="flex items-center space-x-4">
               <div className="w-14 h-14 bg-gradient-to-br from-blue-800/20 to-yellow-500/20 backdrop-blur-sm rounded-xl flex items-center justify-center shadow-lg border border-white/20">
                 <img 
-                  src="/src/logo.png" 
+                  src="/logo.png" 
                   alt="INFO BSC Logo" 
                   className="w-10 h-10 object-contain"
                 />
