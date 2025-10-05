@@ -135,7 +135,7 @@ const Home: React.FC = () => {
   });
   const [formErrors, setFormErrors] = useState<{[key: string]: string}>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-
+  
   // Country codes for phone number selector
   const countryCodes = [
     { code: '+1', country: 'US/Canada', flag: '🇺🇸' },
@@ -197,6 +197,17 @@ const Home: React.FC = () => {
     setIsVisible(true);
   }, []);
 
+  // Smooth scroll function
+  const scrollToContactForm = () => {
+    const contactForm = document.getElementById('contact-form');
+    if (contactForm) {
+      contactForm.scrollIntoView({ 
+        behavior: 'smooth',
+        block: 'start'
+      });
+    }
+  };
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     
@@ -206,7 +217,7 @@ const Home: React.FC = () => {
       const formattedValue = value.replace(/[^\d\s-]/g, '');
       setFormData(prev => ({ ...prev, [name]: formattedValue }));
     } else {
-      setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData(prev => ({ ...prev, [name]: value }));
     }
     
     if (formErrors[name]) {
@@ -350,17 +361,15 @@ const Home: React.FC = () => {
           
               {/* CTA Button */}
               <div className="pt-2 xs:pt-3 sm:pt-4 animate-fadeInUp" style={{animationDelay: '1.6s'}}>
-                <a 
-                  href="https://calendly.com/infobsc12" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
+                <button 
+                  onClick={scrollToContactForm}
                   className="group inline-flex items-center bg-blue-800 text-white font-semibold px-3 xs:px-4 sm:px-6 md:px-8 py-2 xs:py-2 sm:py-3 md:py-4 rounded-lg text-xs xs:text-sm sm:text-base md:text-lg hover:bg-blue-700 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
                 >
                   Get in touch
                   <svg className="ml-1 xs:ml-2 w-4 h-4 xs:w-5 xs:h-5 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                   </svg>
-                </a>
+                </button>
               </div>
             </div>
             
@@ -1617,7 +1626,7 @@ const Home: React.FC = () => {
           </div>
           
             {/* Contact Form */}
-            <div>
+            <div id="contact-form">
               <h3 className="text-xl xs:text-2xl sm:text-3xl md:text-4xl font-bold mb-4 xs:mb-6 sm:mb-8 text-gray-800">Get Free Consultation</h3>
               <form onSubmit={handleSubmit} className="space-y-4 xs:space-y-6 sm:space-y-8">
                 <div className="grid xs:grid-cols-1 sm:grid-cols-2 gap-4 xs:gap-6 sm:gap-8">
@@ -1699,15 +1708,15 @@ const Home: React.FC = () => {
                     </div>
                     
                     {/* Phone Number Input */}
-                    <input
-                      id="phone"
-                      name="phone"
-                      type="tel"
-                      value={formData.phone}
-                      onChange={handleInputChange}
+                  <input
+                    id="phone"
+                    name="phone"
+                    type="tel"
+                    value={formData.phone}
+                    onChange={handleInputChange}
                       className="flex-1 border-2 border-l-0 border-gray-300 rounded-r-xl px-6 py-4 text-lg focus:border-blue-900 focus:outline-none focus:ring-4 focus:ring-blue-200 transition-all duration-300"
                       placeholder="75 249 1313"
-                    />
+                  />
                   </div>
                   <p className="text-sm text-gray-500 mt-2">
                     Full number: {formData.countryCode} {formData.phone || 'your number'}
