@@ -15,7 +15,7 @@ const SDLCAnimation: React.FC = () => {
     { name: 'Analysis', icon: '🔍', color: 'from-green-500 to-green-700', shape: 'rounded-lg' },
     { name: 'Design', icon: '🎨', color: 'from-purple-500 to-purple-700', shape: 'rounded-lg' },
     { name: 'Development', icon: '💻', color: 'from-yellow-500 to-yellow-700', shape: 'rounded-lg' },
-    { name: 'Testing', icon: '🧪', color: 'from-red-500 to-red-700', shape: 'rounded-lg' },
+    { name: 'Testing', icon: '✅', color: 'from-red-500 to-red-700', shape: 'rounded-lg' },
     { name: 'Deployment', icon: '🚀', color: 'from-indigo-500 to-indigo-700', shape: 'rounded-lg' },
     { name: 'Maintenance', icon: '🔧', color: 'from-orange-500 to-orange-700', shape: 'rounded-lg' }
   ];
@@ -473,15 +473,6 @@ const Home: React.FC = () => {
           </div>
           </div>
           
-        {/* Scroll Indicator */}
-        <div className="absolute bottom-4 xs:bottom-6 sm:bottom-8 left-1/2 transform -translate-x-1/2">
-          <div className="flex flex-col items-center text-gray-400">
-            <span className="text-xs xs:text-sm mb-1 xs:mb-2">Scroll to explore</span>
-            <div className="w-5 h-8 xs:w-6 xs:h-10 border-2 border-gray-300 rounded-full flex justify-center">
-              <div className="w-0.5 xs:w-1 h-2 xs:h-3 bg-gray-400 rounded-full mt-1 xs:mt-2 animate-pulse"></div>
-            </div>
-          </div>
-        </div>
       </section>
 
       {/* Key Features Section */}
