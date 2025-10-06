@@ -16,19 +16,19 @@ const Footer: React.FC<FooterProps> = ({ onPolicyClick }) => {
 
       {/* Newsletter Section */}
       <div className="relative z-10 border-b border-gray-700/50">
-        <div className="container mx-auto px-4 py-12">
+        <div className="container mx-auto px-3 xs:px-4 sm:px-6 lg:px-8 py-8 xs:py-10 sm:py-12">
           <div className="max-w-4xl mx-auto text-center">
-            <h3 className="text-3xl font-bold mb-4">
+            <h3 className="text-xl xs:text-2xl sm:text-3xl font-bold mb-3 xs:mb-4">
               Stay Updated with <span className="text-blue-400">INFO</span> <span className="text-yellow-400">BSC</span>
             </h3>
-            <p className="text-gray-300 mb-8 text-lg">Get the latest updates on software development, technology insights, and exclusive offers delivered to your inbox.</p>
-            <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+            <p className="text-gray-300 mb-6 xs:mb-8 text-sm xs:text-base sm:text-lg">Get the latest updates on software development, technology insights, and exclusive offers delivered to your inbox.</p>
+            <div className="flex flex-col sm:flex-row gap-3 xs:gap-4 max-w-md mx-auto">
               <input
                 type="email"
                 placeholder="Enter your email address"
-                className="flex-1 px-4 py-3 rounded-lg bg-white/10 backdrop-blur-sm border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="flex-1 px-3 xs:px-4 py-2 xs:py-3 rounded-lg bg-white/10 backdrop-blur-sm border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm xs:text-base"
               />
-              <button className="px-8 py-3 bg-gradient-to-r from-blue-800 to-yellow-500 text-white font-semibold rounded-lg hover:from-blue-700 hover:to-yellow-400 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105">
+              <button className="px-6 xs:px-8 py-2 xs:py-3 bg-gradient-to-r from-blue-800 to-yellow-500 text-white font-semibold rounded-lg hover:from-blue-700 hover:to-yellow-400 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 text-sm xs:text-base">
                 Subscribe
               </button>
             </div>
@@ -37,34 +37,34 @@ const Footer: React.FC<FooterProps> = ({ onPolicyClick }) => {
       </div>
 
       {/* Main Footer Content */}
-      <div className="relative z-10 container mx-auto px-4 py-16">
-        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="relative z-10 container mx-auto px-3 xs:px-4 sm:px-6 lg:px-8 py-12 xs:py-14 sm:py-16">
+        <div className="grid gap-6 xs:gap-8 sm:gap-8 sm:grid-cols-2 lg:grid-cols-4">
           {/* Company Info */}
-          <div className="sm:col-span-2 lg:col-span-2 space-y-6">
-            <div className="flex items-center space-x-4">
-              <div className="w-14 h-14 bg-gradient-to-br from-blue-800/20 to-yellow-500/20 backdrop-blur-sm rounded-xl flex items-center justify-center shadow-lg border border-white/20">
+          <div className="sm:col-span-2 lg:col-span-2 space-y-4 xs:space-y-6">
+            <div className="flex items-center space-x-3 xs:space-x-4">
+              <div className="w-12 h-12 xs:w-14 xs:h-14 bg-gradient-to-br from-blue-800/20 to-yellow-500/20 backdrop-blur-sm rounded-xl flex items-center justify-center shadow-lg border border-white/20">
                 <img 
                   src="/logo.png" 
                   alt="INFO BSC Logo" 
-                  className="w-10 h-10 object-contain"
+                  className="w-8 h-8 xs:w-10 xs:h-10 object-contain"
                 />
               </div>
               <div>
-                <span className="text-2xl font-bold">
+                <span className="text-xl xs:text-2xl font-bold">
                   <span className="text-blue-400">INFO</span> <span className="text-yellow-400">BSC</span>
                 </span>
                 <p className="text-gray-400 text-sm mt-1">Empowering Digital Growth</p>
               </div>
             </div>
-            <p className="text-gray-300 leading-relaxed text-lg">
+            <p className="text-gray-300 leading-relaxed text-sm xs:text-base sm:text-lg">
               A Sri Lankan based forward-thinking software development company specializing in cutting-edge technology solutions 
               to drive innovation, efficiency, and seamless digital experiences.
             </p>
-            <div className="flex space-x-4">
+            <div className="flex space-x-3 xs:space-x-4">
               <a
                 href="https://www.linkedin.com/company/infobsc/"
                 aria-label="LinkedIn"
-                className="w-12 h-12 bg-gradient-to-r from-blue-600 to-blue-700 rounded-xl flex items-center justify-center hover:from-blue-500 hover:to-blue-600 hover:scale-110 transition-all duration-300 shadow-lg hover:shadow-xl"
+                className="w-10 h-10 xs:w-12 xs:h-12 bg-gradient-to-r from-blue-600 to-blue-700 rounded-xl flex items-center justify-center hover:from-blue-500 hover:to-blue-600 hover:scale-110 transition-all duration-300 shadow-lg hover:shadow-xl"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -173,17 +173,17 @@ const Footer: React.FC<FooterProps> = ({ onPolicyClick }) => {
 
       {/* Bottom Bar */}
       <div className="relative z-10 border-t border-gray-700/50">
-        <div className="container mx-auto px-4 py-8">
+        <div className="container mx-auto px-3 xs:px-4 sm:px-6 lg:px-8 py-6 xs:py-8">
           <div className="flex flex-col lg:flex-row justify-between items-center space-y-4 lg:space-y-0">
-            <div className="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-6">
-              <p className="text-gray-400 text-sm">
+            <div className="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-6 text-center md:text-left">
+              <p className="text-gray-400 text-xs xs:text-sm">
                 © 2024 <span className="text-blue-400">INFO</span> <span className="text-yellow-400">BSC</span>. All rights reserved.
               </p>
-              <p className="text-gray-400 text-sm">
+              <p className="text-gray-400 text-xs xs:text-sm">
                 Software Development Company
               </p>
             </div>
-            <div className="flex flex-wrap justify-center lg:justify-end gap-6 text-sm">
+            <div className="flex flex-wrap justify-center lg:justify-end gap-4 xs:gap-6 text-xs xs:text-sm">
               <button 
                 type="button"
                 onClick={(e) => {

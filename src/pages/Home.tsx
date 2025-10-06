@@ -7,6 +7,8 @@ import Chatbot from '../components/Chatbot';
 // SDLC Animation Component
 const SDLCAnimation: React.FC = () => {
   const [activePhase, setActivePhase] = useState(0);
+  const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
+  const [cursorTrails, setCursorTrails] = useState<Array<{id: number, x: number, y: number}>>([]);
 
   const sdlcPhases = [
     { name: 'Planning', icon: '📋', color: 'from-blue-500 to-blue-700', shape: 'rounded-lg' },
@@ -19,42 +21,94 @@ const SDLCAnimation: React.FC = () => {
   ];
 
   useEffect(() => {
-    
+    const handleResize = () => {
+      setWindowSize({ width: window.innerWidth, height: window.innerHeight });
+    };
+
+    const handleMouseMove = (e: MouseEvent) => {
+      const trailId = Date.now();
+      setCursorTrails(prev => [...prev.slice(-5), { id: trailId, x: e.clientX, y: e.clientY }]);
+      
+      // Remove trail after animation
+      setTimeout(() => {
+        setCursorTrails(prev => prev.filter(trail => trail.id !== trailId));
+      }, 500);
+    };
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    window.addEventListener('mousemove', handleMouseMove);
+
     const interval = setInterval(() => {
       setActivePhase((prev) => (prev + 1) % sdlcPhases.length);
     }, 2000);
 
-    return () => clearInterval(interval);
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('mousemove', handleMouseMove);
+    };
   }, [sdlcPhases.length]);
 
-  // Responsive sizing
-  const radius = window.innerWidth < 640 ? 90 : 140; // Increased radius for better spacing
-  const centerX = window.innerWidth < 640 ? 144 : 192; // Updated for new container size
-  const centerY = window.innerWidth < 640 ? 144 : 192; // Updated for new container size
-  const containerSize = window.innerWidth < 640 ? 'w-72 h-72' : 'w-96 h-96'; // Increased container size
-  const phaseSize = window.innerWidth < 640 ? 'w-16 h-16' : 'w-20 h-20'; // Increased phase size
-  const centerSize = window.innerWidth < 640 ? 'w-16 h-16' : 'w-20 h-20'; // Decreased center size
-  const phaseTextSize = window.innerWidth < 640 ? 'text-xs' : 'text-xs';
-  const iconSize = window.innerWidth < 640 ? 'text-sm' : 'text-lg';
+  // Enhanced responsive sizing with more breakpoints
+  const isMobile = windowSize.width < 640;
+  const isTablet = windowSize.width >= 640 && windowSize.width < 1024;
+
+  // Calculate center coordinates based on actual container size
+  const containerWidth = isMobile ? 320 : isTablet ? 384 : 448; // w-80=320px, w-96=384px, w-[28rem]=448px
+  const containerHeight = isMobile ? 320 : isTablet ? 384 : 448;
+  const centerX = containerWidth / 2;
+  const centerY = containerHeight / 2;
+  
+  const radius = isMobile ? 120 : isTablet ? 160 : 200;
+  const containerSize = isMobile ? 'w-80 h-80' : isTablet ? 'w-96 h-96' : 'w-[28rem] h-[28rem]';
+  const phaseSize = isMobile ? 'w-16 h-16' : isTablet ? 'w-20 h-20' : 'w-24 h-24';
+  const centerSize = isMobile ? 'w-16 h-16' : isTablet ? 'w-20 h-20' : 'w-24 h-24';
+  const phaseTextSize = isMobile ? 'text-xs' : isTablet ? 'text-sm' : 'text-base';
+  const iconSize = isMobile ? 'text-sm' : isTablet ? 'text-lg' : 'text-xl';
 
   return (
-    <div className={`relative ${containerSize} mx-auto`}>
-      {/* Central Hub */}
+    <div className={`relative ${containerSize} mx-auto cursor-none`}>
+      {/* Cursor Trails */}
+      {cursorTrails.map(trail => (
+        <div
+          key={trail.id}
+          className="cursor-trail"
+          style={{
+            left: trail.x - 10,
+            top: trail.y - 10,
+          }}
+        />
+      ))}
+      {/* Central Hub - Perfectly Centered */}
       <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10">
-        <div className={`${centerSize} bg-gradient-to-br from-blue-900 to-yellow-600 rounded-full flex items-center justify-center shadow-2xl border-4 border-white animate-spin`} style={{animationDuration: '4s'}}>
+        <div 
+          className={`${centerSize} bg-gradient-to-br from-blue-900 to-yellow-600 rounded-full flex items-center justify-center shadow-2xl border-4 border-white animate-spin-slow relative overflow-hidden cursor-pointer group`} 
+          style={{animationDuration: '8s'}}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.animationDuration = '2s';
+            e.currentTarget.style.transform = 'scale(1.1)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.animationDuration = '8s';
+            e.currentTarget.style.transform = 'scale(1)';
+          }}
+        >
+          {/* Rotating gradient overlay */}
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-spin" style={{animationDuration: '3s'}}></div>
           <img 
             src="/logo.png" 
             alt="INFO BSC Logo" 
-            className="w-10 h-10 xs:w-12 xs:h-12 object-contain"
+            className={`${isMobile ? 'w-8 h-8' : isTablet ? 'w-10 h-10' : 'w-12 h-12'} object-contain relative z-10`}
           />
         </div>
       </div>
 
-      {/* SDLC Phases */}
+      {/* SDLC Phases - Evenly Distributed Around Center */}
       {sdlcPhases.map((phase, index) => {
         const angle = (index * 360) / sdlcPhases.length;
         const radian = (angle * Math.PI) / 180;
-        const phaseOffset = window.innerWidth < 640 ? 32 : 40; // Updated to match larger phase size
+        const phaseOffset = isMobile ? 32 : isTablet ? 40 : 48;
         const x = centerX + radius * Math.cos(radian) - phaseOffset;
         const y = centerY + radius * Math.sin(radian) - phaseOffset;
         
@@ -73,15 +127,25 @@ const SDLCAnimation: React.FC = () => {
             }}
           >
             <div
-              className={`${phaseSize} ${phase.shape} flex flex-col items-center justify-center shadow-lg border-2 border-white transition-all duration-500 ${
+              className={`${phaseSize} ${phase.shape} flex flex-col items-center justify-center shadow-lg border-2 border-white transition-all duration-500 cursor-pointer group ${
                 isActive 
-                  ? `bg-gradient-to-br ${phase.color} text-white` 
-                  : 'bg-white text-gray-600 hover:bg-gray-50'
+                  ? `bg-gradient-to-br ${phase.color} text-white shadow-2xl ring-4 ring-white/30 animate-pulse` 
+                  : 'bg-white text-gray-600 hover:bg-gray-50 hover:shadow-xl hover:scale-105 hover:border-blue-300'
               }`}
-              style={{transform: `rotate(-${angle}deg)`}}
+              style={{
+                transform: `rotate(-${angle}deg)`,
+                animation: isActive ? `phaseGlow 2s ease-in-out infinite` : 'none'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.cursor = 'pointer';
+                e.currentTarget.style.transform = `rotate(-${angle}deg) scale(1.1)`;
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = `rotate(-${angle}deg) scale(1)`;
+              }}
             >
-              <div className={`${iconSize} mb-1`}>{phase.icon}</div>
-              <div className={`${phaseTextSize} font-semibold text-center leading-tight ${
+              <div className={`${iconSize} ${isMobile ? 'mb-1' : 'mb-1.5'}`}>{phase.icon}</div>
+              <div className={`${phaseTextSize} font-semibold text-center leading-tight px-0.5 ${
                 isActive ? 'text-white' : 'text-gray-600'
               }`}>
                 {phase.name}
@@ -91,7 +155,7 @@ const SDLCAnimation: React.FC = () => {
         );
       })}
 
-      {/* Connection Lines */}
+      {/* Connection Lines with Enhanced Animation */}
       <svg className="absolute inset-0 w-full h-full pointer-events-none">
         {sdlcPhases.map((_, index) => {
           const angle = (index * 360) / sdlcPhases.length;
@@ -100,18 +164,37 @@ const SDLCAnimation: React.FC = () => {
           const y1 = centerY;
           const x2 = centerX + radius * Math.cos(radian);
           const y2 = centerY + radius * Math.sin(radian);
+          const isActive = index === activePhase;
           
           return (
+            <g key={index}>
+              {/* Base line */}
             <line
-              key={index}
               x1={x1}
               y1={y1}
               x2={x2}
               y2={y2}
               stroke="#e5e7eb"
               strokeWidth="2"
+                className="transition-all duration-500"
+              />
+              {/* Animated active line */}
+              {isActive && (
+                <line
+                  x1={x1}
+                  y1={y1}
+                  x2={x2}
+                  y2={y2}
+                  stroke="#3b82f6"
+                  strokeWidth="3"
               className="animate-pulse"
+                  strokeDasharray="5,5"
+                  style={{
+                    animation: 'lineFlow 2s linear infinite'
+                  }}
             />
+              )}
+            </g>
           );
         })}
       </svg>
@@ -331,42 +414,42 @@ const Home: React.FC = () => {
       {/* Hero Section */}
       <section id="home" className="relative min-h-screen bg-white flex items-center overflow-hidden">
         <div className="max-w-7xl mx-auto px-3 xs:px-4 sm:px-6 lg:px-8 w-full relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 xs:gap-8 lg:gap-12 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 xs:gap-6 sm:gap-8 lg:gap-12 items-center">
             {/* Left Content */}
-            <div className={`space-y-4 xs:space-y-6 sm:space-y-8 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+              <div className="space-y-3 xs:space-y-4 sm:space-y-6 lg:space-y-8">
               {/* Main Headlines */}
-              <div className="space-y-2 xs:space-y-3 sm:space-y-4">
-                <h1 className="text-xl xs:text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-7xl font-bold text-gray-900 leading-tight">
+               <div className="space-y-1 xs:space-y-2 sm:space-y-3 lg:space-y-4">
+                 <h1 className="text-lg xs:text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-7xl font-bold text-gray-900 leading-tight">
                   <span className="block animate-fadeInUp" style={{animationDelay: '0.2s'}}>Make A Real</span>
                   <span className="block text-yellow-500 animate-fadeInUp" style={{animationDelay: '0.4s'}}>Difference.</span>
                 </h1>
-                <h2 className="text-lg xs:text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-6xl font-bold text-gray-900 leading-tight">
+                 <h2 className="text-base xs:text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl 2xl:text-6xl font-bold text-gray-900 leading-tight">
                   <span className="block animate-fadeInUp" style={{animationDelay: '0.6s'}}>Your Vision,</span>
                   <span className="block text-yellow-500 animate-fadeInUp" style={{animationDelay: '0.8s'}}>Our Expertise.</span>
                 </h2>
-                <h3 className="text-base xs:text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-5xl font-bold text-gray-900">
+                 <h3 className="text-sm xs:text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl 2xl:text-5xl font-bold text-gray-900">
                   <span className="text-yellow-500 animate-fadeInUp" style={{animationDelay: '1s'}}>Powerful Results.</span>
                 </h3>
               </div>
           
               {/* Description */}
               <div className="space-y-2 xs:space-y-3 sm:space-y-4 text-xs xs:text-sm sm:text-base md:text-lg text-gray-600 leading-relaxed max-w-2xl">
-                <p className="animate-fadeInUp" style={{animationDelay: '1.2s'}}>
+                <p>
                   From complex problems to ambitious visions, we partner with you to transform your ideas into powerful software and mobile solutions.
                 </p>
-                <p className="animate-fadeInUp" style={{animationDelay: '1.4s'}}>
+                <p>
                   We listen, collaborate, and deliver custom solutions that simplify challenges, streamline processes, and fuel business growth.
                 </p>
               </div>
           
               {/* CTA Button */}
-              <div className="pt-2 xs:pt-3 sm:pt-4 animate-fadeInUp" style={{animationDelay: '1.6s'}}>
+              <div className="pt-2 xs:pt-3 sm:pt-4">
                 <button 
                   onClick={scrollToContactForm}
-                  className="group inline-flex items-center bg-blue-800 text-white font-semibold px-3 xs:px-4 sm:px-6 md:px-8 py-2 xs:py-2 sm:py-3 md:py-4 rounded-lg text-xs xs:text-sm sm:text-base md:text-lg hover:bg-blue-700 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
+                  className="group inline-flex items-center bg-blue-800 text-white font-semibold px-4 xs:px-5 sm:px-6 md:px-8 py-2.5 xs:py-3 sm:py-3 md:py-4 rounded-lg text-sm xs:text-base sm:text-lg md:text-lg hover:bg-blue-700 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 w-full sm:w-auto"
                 >
                   Get in touch
-                  <svg className="ml-1 xs:ml-2 w-4 h-4 xs:w-5 xs:h-5 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="ml-2 xs:ml-2 w-4 h-4 xs:w-5 xs:h-5 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                   </svg>
                 </button>
@@ -376,25 +459,7 @@ const Home: React.FC = () => {
             {/* Right Content - SDLC Animation */}
             <div className={`relative transition-all duration-1000 delay-200 mt-6 xs:mt-8 lg:mt-0 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
               {/* Main Visual Container */}
-              <div className="relative bg-gradient-to-br from-blue-50 to-yellow-50 rounded-2xl xs:rounded-3xl p-4 xs:p-6 sm:p-8 shadow-xl xs:shadow-2xl hover:shadow-3xl transition-all duration-500 hover:scale-105">
-                {/* Floating Elements - Hidden on mobile for cleaner look */}
-                <div className="hidden xs:block absolute -top-2 xs:-top-4 -right-2 xs:-right-4 w-12 h-12 xs:w-16 xs:h-16 bg-blue-900 rounded-xl xs:rounded-2xl flex items-center justify-center shadow-lg">
-                  <svg className="w-6 h-6 xs:w-8 xs:h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                  </svg>
-                </div>
-                
-                <div className="hidden xs:block absolute -bottom-2 xs:-bottom-4 -left-2 xs:-left-4 w-8 h-8 xs:w-12 xs:h-12 bg-yellow-600 rounded-lg xs:rounded-xl flex items-center justify-center shadow-lg">
-                  <svg className="w-4 h-4 xs:w-6 xs:h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                  </svg>
-                </div>
-                
-                <div className="hidden sm:block absolute top-1/2 -right-4 xs:-right-6 w-8 h-8 xs:w-10 xs:h-10 bg-blue-900 rounded-lg flex items-center justify-center shadow-lg">
-                  <svg className="w-4 h-4 xs:w-5 xs:h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M13 10V3L4 14h7v7l9-11h-7z"/>
-                  </svg>
-                </div>
+              <div className="relative p-4 xs:p-6 sm:p-8">
                 
                 {/* SDLC Animation Container */}
                 <div className="text-center space-y-3 xs:space-y-4 sm:space-y-6">
@@ -402,30 +467,14 @@ const Home: React.FC = () => {
                   <div className="flex justify-center">
                     <SDLCAnimation />
                   </div>
-                  
-                  <div className="flex justify-center space-x-2 xs:space-x-3 sm:space-x-4">
-                    <div className="w-6 h-6 xs:w-8 xs:h-8 bg-blue-100 rounded-lg flex items-center justify-center hover:scale-110 transition-transform duration-300">
-                      <div className="w-2 h-2 xs:w-3 xs:h-3 bg-blue-900 rounded-full animate-pulse"></div>
                     </div>
-                    <div className="w-6 h-6 xs:w-8 xs:h-8 bg-yellow-100 rounded-lg flex items-center justify-center hover:scale-110 transition-transform duration-300">
-                      <div className="w-2 h-2 xs:w-3 xs:h-3 bg-yellow-600 rounded-full animate-pulse" style={{animationDelay: '0.5s'}}></div>
                     </div>
-                    <div className="w-6 h-6 xs:w-8 xs:h-8 bg-blue-100 rounded-lg flex items-center justify-center hover:scale-110 transition-transform duration-300">
-                      <div className="w-2 h-2 xs:w-3 xs:h-3 bg-blue-700 rounded-full animate-pulse" style={{animationDelay: '1s'}}></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              
-              {/* Background Decorative Elements - Hidden on mobile */}
-              <div className="hidden sm:block absolute -z-10 top-6 xs:top-10 left-6 xs:left-10 w-20 xs:w-32 h-20 xs:h-32 bg-blue-100 rounded-full opacity-50 animate-pulse-slow"></div>
-              <div className="hidden sm:block absolute -z-10 bottom-6 xs:bottom-10 right-6 xs:right-10 w-16 xs:w-24 h-16 xs:h-24 bg-yellow-100 rounded-full opacity-50 animate-pulse-slow" style={{animationDelay: '2s'}}></div>
             </div>
           </div>
           </div>
           
         {/* Scroll Indicator */}
-        <div className="absolute bottom-4 xs:bottom-6 sm:bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+        <div className="absolute bottom-4 xs:bottom-6 sm:bottom-8 left-1/2 transform -translate-x-1/2">
           <div className="flex flex-col items-center text-gray-400">
             <span className="text-xs xs:text-sm mb-1 xs:mb-2">Scroll to explore</span>
             <div className="w-5 h-8 xs:w-6 xs:h-10 border-2 border-gray-300 rounded-full flex justify-center">
@@ -885,44 +934,44 @@ const Home: React.FC = () => {
               
               {/* Main Content */}
               <div className="relative z-10">
-              <div className="flex items-center justify-center mb-4">
+              <div className="flex flex-col xs:flex-row items-center justify-center mb-3 xs:mb-4 space-y-2 xs:space-y-0">
                   {/* Central Logo */}
-                  <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center mr-4 shadow-lg border border-white/30">
+                  <div className="w-12 h-12 xs:w-14 xs:h-14 sm:w-16 sm:h-16 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center xs:mr-3 sm:mr-4 shadow-lg border border-white/30">
                     <img 
                       src="/logo.png" 
                       alt="INFO BSC Logo" 
-                      className="w-12 h-12 object-contain"
+                      className="w-8 h-8 xs:w-10 xs:h-10 sm:w-12 sm:h-12 object-contain"
                     />
                   </div>
-                <h3 className="text-2xl font-bold">FREE CONSULTATION AVAILABLE</h3>
+                <h3 className="text-base xs:text-lg sm:text-xl md:text-2xl font-bold text-center xs:text-left">FREE CONSULTATION AVAILABLE</h3>
               </div>
-              <p className="text-lg opacity-90 mb-6">Get expert advice on your project at no cost</p>
+              <p className="text-sm xs:text-base sm:text-lg opacity-90 mb-4 xs:mb-5 sm:mb-6 text-center">Get expert advice on your project at no cost</p>
                 
                 {/* Consultation Benefits */}
-                <div className="flex justify-center space-x-8 mb-6">
-                  <div className="flex items-center space-x-2">
-                    <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
-                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <div className="grid grid-cols-1 xs:grid-cols-3 gap-3 xs:gap-4 sm:gap-6 lg:gap-8 mb-4 xs:mb-5 sm:mb-6 max-w-4xl mx-auto">
+                  <div className="flex items-center justify-center xs:justify-start space-x-2 bg-white/10 backdrop-blur-sm rounded-lg p-3 xs:p-4">
+                    <div className="w-6 h-6 xs:w-7 xs:h-7 sm:w-8 sm:h-8 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0">
+                      <svg className="w-3 h-3 xs:w-3.5 xs:h-3.5 sm:w-4 sm:h-4" fill="currentColor" viewBox="0 0 20 20">
                         <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                       </svg>
                     </div>
-                    <span className="text-sm opacity-90">Project Analysis</span>
+                    <span className="text-xs xs:text-sm opacity-90 text-center xs:text-left">Project Analysis</span>
                   </div>
-                  <div className="flex items-center space-x-2">
-                    <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
-                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <div className="flex items-center justify-center xs:justify-start space-x-2 bg-white/10 backdrop-blur-sm rounded-lg p-3 xs:p-4">
+                    <div className="w-6 h-6 xs:w-7 xs:h-7 sm:w-8 sm:h-8 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0">
+                      <svg className="w-3 h-3 xs:w-3.5 xs:h-3.5 sm:w-4 sm:h-4" fill="currentColor" viewBox="0 0 20 20">
                         <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                       </svg>
                     </div>
-                    <span className="text-sm opacity-90">Tech Recommendations</span>
+                    <span className="text-xs xs:text-sm opacity-90 text-center xs:text-left">Tech Recommendations</span>
                   </div>
-                  <div className="flex items-center space-x-2">
-                    <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
-                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <div className="flex items-center justify-center xs:justify-start space-x-2 bg-white/10 backdrop-blur-sm rounded-lg p-3 xs:p-4">
+                    <div className="w-6 h-6 xs:w-7 xs:h-7 sm:w-8 sm:h-8 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0">
+                      <svg className="w-3 h-3 xs:w-3.5 xs:h-3.5 sm:w-4 sm:h-4" fill="currentColor" viewBox="0 0 20 20">
                         <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                       </svg>
                     </div>
-                    <span className="text-sm opacity-90">Cost Estimation</span>
+                    <span className="text-xs xs:text-sm opacity-90 text-center xs:text-left">Cost Estimation</span>
                   </div>
                 </div>
                 
@@ -930,10 +979,10 @@ const Home: React.FC = () => {
                   href="https://calendly.com/infobsc12" 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="group inline-flex items-center bg-white text-blue-800 font-semibold px-8 py-3 rounded-lg hover:bg-gray-100 transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl"
+                  className="group inline-flex items-center justify-center bg-white text-blue-800 font-semibold px-4 xs:px-6 sm:px-8 py-2 xs:py-3 rounded-lg hover:bg-gray-100 transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl w-full xs:w-auto text-sm xs:text-base"
                 >
                 Schedule Your Free Consultation
-                <svg className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="ml-2 w-4 h-4 xs:w-5 xs:h-5 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>
               </a>
@@ -1346,35 +1395,35 @@ const Home: React.FC = () => {
       </section>
 
       {/* Success Stories Section */}
-      <section id="success-stories" className="py-24 bg-white relative overflow-hidden">
+      <section id="success-stories" className="py-12 xs:py-16 sm:py-20 lg:py-24 bg-white relative overflow-hidden">
         {/* Background Elements */}
         <div className="absolute inset-0">
-          <div className="absolute top-10 left-10 w-40 h-40 bg-gradient-to-r from-blue-100/20 to-purple-100/20 rounded-full blur-3xl"></div>
-          <div className="absolute bottom-10 right-10 w-50 h-50 bg-gradient-to-r from-green-100/20 to-cyan-100/20 rounded-full blur-3xl"></div>
+          <div className="absolute top-10 left-10 w-20 h-20 xs:w-32 xs:h-32 sm:w-40 sm:h-40 bg-gradient-to-r from-blue-100/20 to-purple-100/20 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-10 right-10 w-24 h-24 xs:w-40 xs:h-40 sm:w-50 sm:h-50 bg-gradient-to-r from-green-100/20 to-cyan-100/20 rounded-full blur-3xl"></div>
         </div>
         
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="text-center mb-20">
-            <h2 className="text-6xl font-bold mb-8 text-gradient animate-fadeInUp">Success Stories</h2>
-            <p className="text-2xl text-gray-600 max-w-4xl mx-auto leading-relaxed animate-fadeInUp" style={{animationDelay: '0.2s'}}>
+        <div className="container mx-auto px-3 xs:px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="text-center mb-12 xs:mb-16 sm:mb-20">
+            <h2 className="text-3xl xs:text-4xl sm:text-5xl lg:text-6xl font-bold mb-4 xs:mb-6 sm:mb-8 text-gradient animate-fadeInUp">Success Stories</h2>
+            <p className="text-base xs:text-lg sm:text-xl lg:text-2xl text-gray-600 max-w-4xl mx-auto leading-relaxed animate-fadeInUp px-4" style={{animationDelay: '0.2s'}}>
               Discover how we've helped businesses transform their digital presence and achieve remarkable results
             </p>
           </div>
           
           {/* Interactive Testimonials Carousel */}
-          <div className="mb-20">
+          <div className="mb-12 xs:mb-16 sm:mb-20">
             <div className="relative max-w-6xl mx-auto">
-              <div className="overflow-hidden rounded-3xl">
+              <div className="overflow-hidden rounded-2xl xs:rounded-3xl">
                 <div 
                   className="flex transition-transform duration-500 ease-in-out"
                   style={{ transform: `translateX(-${activeTestimonial * 100}%)` }}
                 >
                   {testimonials.map((testimonial, index) => (
                     <div key={index} className="w-full flex-shrink-0">
-                      <div className="bg-gradient-to-br from-blue-50 via-white to-purple-50 p-12 rounded-3xl shadow-2xl border border-gray-100/50">
-                        <div className="flex flex-col lg:flex-row items-center gap-12">
+                      <div className="bg-gradient-to-br from-blue-50 via-white to-purple-50 p-6 xs:p-8 sm:p-10 lg:p-12 rounded-2xl xs:rounded-3xl shadow-2xl border border-gray-100/50">
+                        <div className="flex flex-col lg:flex-row items-center gap-6 xs:gap-8 sm:gap-10 lg:gap-12">
                           <div className="flex-shrink-0">
-                            <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-white shadow-xl">
+                            <div className="w-24 h-24 xs:w-28 xs:h-28 sm:w-32 sm:h-32 rounded-full overflow-hidden border-4 border-white shadow-xl">
                               <img 
                                 src={`https://images.unsplash.com/photo-${1500000000000 + index * 1000000}?auto=format&fit=crop&w=200&q=80`}
                                 alt={testimonial.name}
@@ -1384,25 +1433,25 @@ const Home: React.FC = () => {
                                 }}
                               />
                             </div>
-                            <div className="text-center mt-6">
-                              <h3 className="text-2xl font-bold text-gray-800">{testimonial.name}</h3>
-                              <p className="text-gray-600 text-lg">{testimonial.role}</p>
+                            <div className="text-center mt-4 xs:mt-6">
+                              <h3 className="text-lg xs:text-xl sm:text-2xl font-bold text-gray-800">{testimonial.name}</h3>
+                              <p className="text-sm xs:text-base sm:text-lg text-gray-600">{testimonial.role}</p>
                               <div className="flex justify-center text-yellow-400 mt-2">
                                 {[...Array(testimonial.rating)].map((_, i) => (
-                                  <span key={i} className="text-2xl">★</span>
+                                  <span key={i} className="text-lg xs:text-xl sm:text-2xl">★</span>
                                 ))}
                               </div>
                             </div>
                           </div>
                           <div className="flex-1">
                             <div className="relative">
-                              <div className="text-6xl text-blue-200 absolute -top-4 -left-2">"</div>
-                              <p className="text-2xl text-gray-700 italic leading-relaxed pl-8">
+                              <div className="text-3xl xs:text-4xl sm:text-5xl lg:text-6xl text-blue-200 absolute -top-2 xs:-top-3 sm:-top-4 -left-1 xs:-left-2">"</div>
+                              <p className="text-base xs:text-lg sm:text-xl lg:text-2xl text-gray-700 italic leading-relaxed pl-4 xs:pl-6 sm:pl-8">
                                 {testimonial.content}
                               </p>
                             </div>
-                            <div className="mt-8">
-                              <span className="inline-block bg-gradient-to-r from-blue-900 to-yellow-600 text-white px-6 py-3 rounded-full text-lg font-semibold shadow-lg">
+                            <div className="mt-4 xs:mt-6 sm:mt-8">
+                              <span className="inline-block bg-gradient-to-r from-blue-900 to-yellow-600 text-white px-4 xs:px-5 sm:px-6 py-2 xs:py-2.5 sm:py-3 rounded-full text-sm xs:text-base sm:text-lg font-semibold shadow-lg">
                                 Project: {testimonial.project}
                               </span>
                             </div>
@@ -1415,12 +1464,12 @@ const Home: React.FC = () => {
               </div>
               
               {/* Carousel Controls */}
-              <div className="flex justify-center mt-8 space-x-4">
+              <div className="flex justify-center mt-6 xs:mt-8 space-x-3 xs:space-x-4">
                 {testimonials.map((_, index) => (
                   <button
                     key={index}
                     onClick={() => setActiveTestimonial(index)}
-                    className={`w-4 h-4 rounded-full transition-all duration-300 ${
+                    className={`w-3 h-3 xs:w-4 xs:h-4 rounded-full transition-all duration-300 ${
                       index === activeTestimonial 
                         ? 'bg-gradient-to-r from-blue-900 to-yellow-600 scale-125' 
                         : 'bg-gray-300 hover:bg-gray-400'
@@ -1627,9 +1676,9 @@ const Home: React.FC = () => {
           
             {/* Contact Form */}
             <div id="contact-form">
-              <h3 className="text-xl xs:text-2xl sm:text-3xl md:text-4xl font-bold mb-4 xs:mb-6 sm:mb-8 text-gray-800">Get Free Consultation</h3>
-              <form onSubmit={handleSubmit} className="space-y-4 xs:space-y-6 sm:space-y-8">
-                <div className="grid xs:grid-cols-1 sm:grid-cols-2 gap-4 xs:gap-6 sm:gap-8">
+              <h3 className="text-lg xs:text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-3 xs:mb-4 sm:mb-6 lg:mb-8 text-gray-800">Get Free Consultation</h3>
+              <form onSubmit={handleSubmit} className="space-y-3 xs:space-y-4 sm:space-y-6 lg:space-y-8">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 xs:gap-4 sm:gap-6 lg:gap-8">
                   <div>
                     <label htmlFor="name" className="block text-sm xs:text-base sm:text-lg font-semibold text-gray-700 mb-1 xs:mb-2 sm:mb-3">
                       Full Name *
@@ -1691,7 +1740,7 @@ const Home: React.FC = () => {
                       <select
                         value={formData.countryCode}
                         onChange={(e) => setFormData(prev => ({ ...prev, countryCode: e.target.value }))}
-                        className="border-2 border-gray-300 rounded-l-xl px-4 py-4 text-lg focus:border-blue-900 focus:outline-none focus:ring-4 focus:ring-blue-200 transition-all duration-300 bg-white appearance-none cursor-pointer min-w-[120px]"
+                        className="border-2 border-gray-300 rounded-l-xl px-3 xs:px-4 py-2 xs:py-3 sm:py-4 text-sm xs:text-base sm:text-lg focus:border-blue-900 focus:outline-none focus:ring-4 focus:ring-blue-200 transition-all duration-300 bg-white appearance-none cursor-pointer min-w-[100px] xs:min-w-[120px]"
                       >
                         {countryCodes.map((country) => (
                           <option key={country.code} value={country.code}>
@@ -1714,7 +1763,7 @@ const Home: React.FC = () => {
                     type="tel"
                     value={formData.phone}
                     onChange={handleInputChange}
-                      className="flex-1 border-2 border-l-0 border-gray-300 rounded-r-xl px-6 py-4 text-lg focus:border-blue-900 focus:outline-none focus:ring-4 focus:ring-blue-200 transition-all duration-300"
+                      className="flex-1 border-2 border-l-0 border-gray-300 rounded-r-xl px-4 xs:px-5 sm:px-6 py-2 xs:py-3 sm:py-4 text-sm xs:text-base sm:text-lg focus:border-blue-900 focus:outline-none focus:ring-4 focus:ring-blue-200 transition-all duration-300"
                       placeholder="75 249 1313"
                   />
                   </div>
@@ -1750,7 +1799,7 @@ const Home: React.FC = () => {
                 <button 
                   type="submit" 
                   disabled={isSubmitting}
-                  className={`w-full font-bold py-3 xs:py-4 sm:py-6 px-6 xs:px-8 sm:px-12 rounded-2xl text-sm xs:text-lg sm:text-xl transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl ${
+                  className={`w-full font-bold py-3 xs:py-4 sm:py-5 lg:py-6 px-4 xs:px-6 sm:px-8 lg:px-12 rounded-2xl text-sm xs:text-base sm:text-lg lg:text-xl transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl ${
                     isSubmitting 
                       ? 'bg-gray-400 cursor-not-allowed' 
                       : 'bg-gradient-to-r from-blue-800 to-yellow-500 hover:from-blue-700 hover:to-yellow-400'

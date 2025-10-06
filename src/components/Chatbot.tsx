@@ -123,7 +123,7 @@ const Chatbot: React.FC = () => {
 
       {/* Chat Window */}
       {isOpen && (
-        <div className="fixed bottom-20 xs:bottom-24 right-4 xs:right-6 z-50 w-80 xs:w-96 sm:w-96 md:w-80 md:h-96 bg-white rounded-lg shadow-2xl border border-gray-200 flex flex-col chatbot-window">
+        <div className="fixed bottom-20 xs:bottom-24 right-2 xs:right-4 sm:right-6 z-50 w-[calc(100vw-1rem)] xs:w-80 sm:w-96 md:w-80 h-[calc(100vh-8rem)] xs:h-96 sm:h-96 md:h-96 bg-white rounded-lg shadow-2xl border border-gray-200 flex flex-col chatbot-window max-w-sm">
           {/* Header */}
           <div className="bg-gradient-to-r from-blue-800 to-yellow-500 text-white p-3 xs:p-4 rounded-t-lg">
             <div className="flex items-center justify-between">
@@ -161,13 +161,13 @@ const Chatbot: React.FC = () => {
                 className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
               >
                 <div
-                  className={`max-w-xs px-4 py-2 rounded-lg ${
+                  className={`max-w-[85%] xs:max-w-xs px-3 xs:px-4 py-2 rounded-lg ${
                     message.sender === 'user'
                       ? 'bg-blue-900 text-white'
                       : 'bg-gray-100 text-gray-800'
                   }`}
                 >
-                  <p className="text-sm">{message.text}</p>
+                  <p className="text-sm break-words">{message.text}</p>
                   <p className="text-xs opacity-70 mt-1">
                     {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                   </p>

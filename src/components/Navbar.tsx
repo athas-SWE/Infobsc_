@@ -47,7 +47,7 @@ const Navbar: React.FC = () => {
       <div className="max-w-7xl mx-auto flex items-center justify-between py-2 xs:py-3 sm:py-4 md:py-6 px-3 xs:px-4 sm:px-6 lg:px-8">
         {/* Logo */}
         <a href="#home" className="flex items-center">
-          <span className="text-lg xs:text-xl sm:text-2xl md:text-3xl font-bold">
+          <span className="text-base xs:text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold">
             <span className="text-blue-900">INFO</span> <span className="text-yellow-500">BSC</span>
           </span>
         </a>
