@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 
 interface Message {
   id: number;
-  text: string;
+  text: React.ReactNode;
   sender: 'user' | 'bot';
   timestamp: Date;
 }
@@ -12,7 +12,11 @@ const Chatbot: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: 1,
-      text: "Hello! I'm the <span className='text-blue-900'>INFO</span> <span className='text-yellow-500'>BSC</span> assistant. How can I help you today?",
+      text: (
+        <>
+          Hello! I'm the <span className='text-blue-900'>INFO</span> <span className='text-yellow-500'>BSC</span> assistant. How can I help you today?
+        </>
+      ),
       sender: 'bot',
       timestamp: new Date()
     }
@@ -57,15 +61,23 @@ const Chatbot: React.FC = () => {
     }, 1000);
   };
 
-  const generateBotResponse = (userInput: string): string => {
+  const generateBotResponse = (userInput: string): React.ReactNode => {
     const input = userInput.toLowerCase();
     
     if (input.includes('hello') || input.includes('hi')) {
-      return "Hello! Welcome to <span className='text-blue-900'>INFO</span> <span className='text-yellow-500'>BSC</span>. How can I assist you with your software development needs?";
+      return (
+        <>
+          Hello! Welcome to <span className='text-blue-900'>INFO</span> <span className='text-yellow-500'>BSC</span>. How can I assist you with your software development needs?
+        </>
+      );
     }
     
     if (input.includes('service') || input.includes('what do you do')) {
-      return "<span className='text-blue-900'>INFO</span> <span className='text-yellow-500'>BSC</span> offers comprehensive software development services including web development, mobile apps, SaaS solutions, AI & automation, cloud & DevOps, and custom software development using ASP.NET Core, React, MySQL, and Azure.";
+      return (
+        <>
+          <span className='text-blue-900'>INFO</span> <span className='text-yellow-500'>BSC</span> offers comprehensive software development services including web development, mobile apps, SaaS solutions, AI & automation, cloud & DevOps, and custom software development using ASP.NET Core, React, MySQL, and Azure.
+        </>
+      );
     }
     
     if (input.includes('price') || input.includes('cost') || input.includes('quote')) {
@@ -92,7 +104,11 @@ const Chatbot: React.FC = () => {
       return "We provide 24/7 technical support for all our clients. Our team is always ready to help with any issues or questions you might have.";
     }
     
-    return "Thank you for your message! I'd be happy to help you with any questions about <span className='text-blue-900'>INFO</span> <span className='text-yellow-500'>BSC</span>'s services. You can also contact us directly for more detailed information.";
+    return (
+      <>
+        Thank you for your message! I'd be happy to help you with any questions about <span className='text-blue-900'>INFO</span> <span className='text-yellow-500'>BSC</span>'s services. You can also contact us directly for more detailed information.
+      </>
+    );
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
