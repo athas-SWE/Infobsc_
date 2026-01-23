@@ -128,7 +128,7 @@ const CookiePolicy: React.FC<CookiePolicyProps> = ({ onClose }) => {
             </p>
             <div className="bg-gray-50 p-4 rounded-lg mt-4">
               <p className="text-gray-700"><strong>Email:</strong> contact@infobsc.com</p>
-              <p className="text-gray-700"><strong>Phone:</strong> +94 75 249 1313</p>
+              <p className="text-gray-700"><strong>Phone:</strong> +94 71 249 1313</p>
               <p className="text-gray-700"><strong>Address:</strong> 159A, Mathrsa Road, Kalmunai -10, Sri Lanka</p>
             </div>
           </section>

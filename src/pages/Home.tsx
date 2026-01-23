@@ -1615,7 +1615,7 @@ const Home: React.FC = () => {
                     </p>
                     <p className="flex items-center">
                       <span className="text-blue-900 mr-3">📞</span>
-                      <strong>Phone:</strong> +94 75 249 1313
+                      <strong>Phone:</strong> +94 71 249 1313
                     </p>
                     <p className="flex items-center">
                       <span className="text-blue-900 mr-3">🏢</span>
@@ -1755,7 +1755,7 @@ const Home: React.FC = () => {
                     value={formData.phone}
                     onChange={handleInputChange}
                       className="flex-1 border-2 border-l-0 border-gray-300 rounded-r-xl px-4 xs:px-5 sm:px-6 py-2 xs:py-3 sm:py-4 text-sm xs:text-base sm:text-lg focus:border-blue-900 focus:outline-none focus:ring-4 focus:ring-blue-200 transition-all duration-300"
-                      placeholder="75 249 1313"
+                      placeholder="71 249 1313"
                   />
                   </div>
                   <p className="text-sm text-gray-500 mt-2">

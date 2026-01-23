@@ -85,7 +85,7 @@ const Chatbot: React.FC = () => {
     }
     
     if (input.includes('contact') || input.includes('phone') || input.includes('email')) {
-      return "You can reach us at contact@infobsc.com or call us at +94 75 249 1313. Our address is 159A, Mathrsa Road, Kalmunai -10, Sri Lanka. We're also available on WhatsApp, Facebook and LinkedIn. Would you like me to connect you with our team?";
+      return "You can reach us at contact@infobsc.com or call us at +94 71 249 1313. Our address is 159A, Mathrsa Road, Kalmunai -10, Sri Lanka. We're also available on WhatsApp, Facebook and LinkedIn. Would you like me to connect you with our team?";
     }
 
     if (input.includes('whatsapp') || input.includes('whats app')) {
@@ -106,7 +106,10 @@ const Chatbot: React.FC = () => {
     
     return (
       <>
-        Thank you for your message! I'd be happy to help you with any questions about <span className='text-blue-900'>INFO</span> <span className='text-yellow-500'>BSC</span>'s services. You can also contact us directly for more detailed information.
+        Thank you for your message! I'd be happy to help you with any questions about <span className='text-blue-900'>INFO</span> <span className='text-yellow-500'>BSC</span>'s services.<br/><br/>
+        You can also contact us directly for more detailed information:<br/>
+        📞 <strong>Phone:</strong> +94 71 249 1313<br/>
+        📧 <strong>Email:</strong> contact@infobsc.com<br/>
       </>
     );
   };
