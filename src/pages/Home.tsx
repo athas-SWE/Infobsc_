@@ -1,8 +1,6 @@
-
 import React, { useState, useEffect } from 'react';
-import Navbar from '../components/Navbar';
-import WhatsAppButton from '../components/WhatsAppButton';
-import Chatbot from '../components/Chatbot';
+import { Link } from 'react-router-dom';
+import { getPublishedProducts } from '../data/products';
 
 // SDLC Animation Component
 const SDLCAnimation: React.FC = () => {
@@ -408,9 +406,10 @@ const Home: React.FC = () => {
     fetchMediumPosts();
   }, []);
 
+  const productHighlights = getPublishedProducts();
+
   return (
     <>
-      <Navbar />
       {/* Hero Section */}
       <section id="home" className="relative min-h-screen bg-white flex items-center overflow-hidden">
         <div className="max-w-7xl mx-auto px-3 xs:px-4 sm:px-6 lg:px-8 w-full relative z-10">
@@ -979,6 +978,50 @@ const Home: React.FC = () => {
               </a>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Products & Solutions teaser */}
+      <section id="products" className="py-16 xs:py-20 bg-gradient-to-br from-blue-950 via-blue-900 to-yellow-700 text-white">
+        <div className="max-w-7xl mx-auto px-3 xs:px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-10 xs:mb-12">
+            <p className="text-yellow-300 font-semibold uppercase tracking-wide text-sm mb-3">INFOBSC Products</p>
+            <h2 className="text-3xl xs:text-4xl sm:text-5xl font-bold mb-4">
+              Ready-to-use software for growing businesses
+            </h2>
+            <p className="text-blue-100 max-w-3xl mx-auto text-base xs:text-lg">
+              Beyond custom development, INFOBSC also offers practical software products for education, distribution and sales teams.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-4 xs:gap-6 mb-10">
+            {productHighlights.map((product) => (
+              <Link
+                key={product.id}
+                to={`/products/${product.slug}`}
+                className="rounded-2xl bg-white/10 border border-white/15 p-5 hover:bg-white/15 transition-all"
+              >
+                <span className="text-xs uppercase tracking-wide text-yellow-200">{product.category}</span>
+                <h3 className="text-xl font-bold mt-2 mb-1">{product.name}</h3>
+                <p className="text-sm text-blue-100">{product.shortDescription}</p>
+              </Link>
+            ))}
+          </div>
+
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <Link
+              to="/products"
+              className="inline-flex items-center justify-center px-6 py-3 rounded-lg bg-white text-blue-900 font-semibold hover:bg-blue-50 transition-colors"
+            >
+              Explore Products
+            </Link>
+            <Link
+              to="/book-demo"
+              className="inline-flex items-center justify-center px-6 py-3 rounded-lg border border-white/40 font-semibold hover:bg-white/10 transition-colors"
+            >
+              Book Your Demo →
+            </Link>
           </div>
         </div>
       </section>
@@ -1813,9 +1856,6 @@ const Home: React.FC = () => {
           </div>
         </div>
       </section>
-
-      <WhatsAppButton />
-      <Chatbot />
     </>
   );
 };

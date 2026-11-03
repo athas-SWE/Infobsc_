@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 interface FooterProps {
   onPolicyClick: (policyType: string) => void;
@@ -113,58 +114,77 @@ const Footer: React.FC<FooterProps> = ({ onPolicyClick }) => {
             <h3 className="text-xl font-semibold text-blue-400">Quick Links</h3>
             <ul className="space-y-3">
               <li>
-                <a href="#home" className="text-gray-300 hover:text-white transition-colors flex items-center group">
+                <Link to="/#home" className="text-gray-300 hover:text-white transition-colors flex items-center group">
                   <svg className="w-4 h-4 mr-2 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                   </svg>
                   Home
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#about" className="text-gray-300 hover:text-white transition-colors flex items-center group">
+                <Link to="/products" className="text-gray-300 hover:text-white transition-colors flex items-center group">
                   <svg className="w-4 h-4 mr-2 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                   </svg>
-                  About Us
-                </a>
+                  Products
+                </Link>
               </li>
               <li>
-                <a href="#services" className="text-gray-300 hover:text-white transition-colors flex items-center group">
+                <Link to="/book-demo" className="text-gray-300 hover:text-white transition-colors flex items-center group">
+                  <svg className="w-4 h-4 mr-2 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                  Book a Demo
+                </Link>
+              </li>
+              <li>
+                <Link to="/#services" className="text-gray-300 hover:text-white transition-colors flex items-center group">
                   <svg className="w-4 h-4 mr-2 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                   </svg>
                   Services
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#blog" className="text-gray-300 hover:text-white transition-colors flex items-center group">
-                  <svg className="w-4 h-4 mr-2 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
-                  Blog
-                </a>
-              </li>
-              <li>
-                <a href="#contact" className="text-gray-300 hover:text-white transition-colors flex items-center group">
+                <Link to="/#contact" className="text-gray-300 hover:text-white transition-colors flex items-center group">
                   <svg className="w-4 h-4 mr-2 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                   </svg>
                   Contact
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
 
-          {/* Services */}
+          {/* Products */}
           <div className="space-y-6">
-            <h3 className="text-xl font-semibold text-yellow-400">Our Services</h3>
+            <h3 className="text-xl font-semibold text-yellow-400">Our Products</h3>
             <ul className="space-y-3">
-              <li className="text-gray-300 hover:text-white transition-colors cursor-pointer">Web Application Development</li>
-              <li className="text-gray-300 hover:text-white transition-colors cursor-pointer">Mobile Application Development</li>
-              <li className="text-gray-300 hover:text-white transition-colors cursor-pointer">AI & Automation</li>
-              <li className="text-gray-300 hover:text-white transition-colors cursor-pointer">Cloud Solutions & Development</li>
-              <li className="text-gray-300 hover:text-white transition-colors cursor-pointer">Desktop Application Development</li>
-              <li className="text-gray-300 hover:text-white transition-colors cursor-pointer">Enterprise Software Development</li>
+              <li>
+                <Link to="/products/sids" className="text-gray-300 hover:text-white transition-colors">
+                  SIDS – Student Management
+                </Link>
+              </li>
+              <li>
+                <Link to="/products/distribution360" className="text-gray-300 hover:text-white transition-colors">
+                  Distribution360
+                </Link>
+              </li>
+              <li>
+                <Link to="/products/crm" className="text-gray-300 hover:text-white transition-colors">
+                  INFOBSC CRM
+                </Link>
+              </li>
+              <li>
+                <Link to="/products" className="text-gray-300 hover:text-white transition-colors">
+                  All Software Products
+                </Link>
+              </li>
+              <li>
+                <Link to="/book-demo" className="text-yellow-300 hover:text-yellow-200 transition-colors font-medium">
+                  Book a Product Demo →
+                </Link>
+              </li>
             </ul>
           </div>
 
