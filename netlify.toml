@@ -4,6 +4,8 @@
 
 [build.environment]
   NODE_VERSION = "20"
+  # Ensure Vite/Tailwind (devDependencies) are installed on Netlify
+  NPM_FLAGS = "--include=dev"
 
 [[redirects]]
   from = "/*"

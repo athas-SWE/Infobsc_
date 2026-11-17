@@ -197,7 +197,7 @@ const Footer: React.FC<FooterProps> = ({ onPolicyClick }) => {
           <div className="flex flex-col lg:flex-row justify-between items-center space-y-4 lg:space-y-0">
             <div className="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-6 text-center md:text-left">
               <p className="text-gray-400 text-xs xs:text-sm">
-                © 2024 <span className="text-blue-400">INFO</span> <span className="text-yellow-400">BSC</span>. All rights reserved.
+                © {new Date().getFullYear()} <span className="text-blue-400">INFO</span> <span className="text-yellow-400">BSC</span>. All rights reserved.
               </p>
               <p className="text-gray-400 text-xs xs:text-sm">
                 Software Development Company
